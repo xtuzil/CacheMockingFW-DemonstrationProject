@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25" zv="Cache for Windows (x86-64) 2017.2.1 (Build 801U)" ts="2020-03-14 21:37:20">
+<Class name="ZK.Mocks.Zkouska">
+<ProcedureBlock>1</ProcedureBlock>
+<Super>ZK.MockBase</Super>
+<TimeChanged>65452,54001.32306</TimeChanged>
+<TimeCreated>65452,54001.280393</TimeCreated>
+
+<Method name="%DispatchClassMethod">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>Class:%String,methodName:%String,Args...</FormalSpec>
+<Implementation><![CDATA[
+  set mockName = $PIECE(Class,".",3) 
+  quit ##class(ZK.MockBase).MethodCalled(mockName, methodName, Args...)
+]]></Implementation>
+</Method>
+
+<Method name="SaveMethod">
+<ClassMethod>1</ClassMethod>
+<FormalSpec>methodName:%String,params,return,restMethod:%String=""</FormalSpec>
+<Implementation><![CDATA[
+  set mockName = $PIECE($CLASSNAME(),".",3) 
+  do ##super(mockName, methodName, params, return, restMethod)
+]]></Implementation>
+</Method>
+
+<Storage name="Default">
+<Type>%Library.CacheStorage</Type>
+</Storage>
+</Class>
+</Export>
