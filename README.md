@@ -16,7 +16,10 @@ As a mock user you have two options:
 
 ## Instructions for FW user in Caché
 The main class which take care of the mocks is MockManager. It allows:
-    - create mock - it generate class definition -> CreateMock(NameOfTheMock) 
+    - create mock - it generate class definition
+    ```
+    CreateMock(NameOfTheMock) 
+    ```
     - export mock for Docker usage -> ExportMock(NameOfTheMock)
     - create mocks and their mocked methods from .csv file (csv file in format: 'Name of the Mock;Method;Input obj;Response;Rest method' ) -> MockMethodsFromCSV(FilePath)
     - handling mock -> GetAllMocks(), GetAllMethods(NameOfTheMock), ExportMockToCSV(NameOfTheMock), DeleteMock(NameOfTheMock), DeleteMethod(NameOfTheMock, NameOfTheMethod), DeleteMethodWithParametr(NameOfTheMock, NameOfTheMethod, Parameters), CleanAll())
