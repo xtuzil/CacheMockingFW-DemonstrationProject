@@ -13,8 +13,10 @@ As a mock user you have two options:
     e.g. docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
     ```
 2) Build container with docker-compose from folder which you obtained
-   ```
-    - open the terminal in the directory of folder with mock
+        ```
+- open the terminal in the directory of folder with mock  
+        ```
+   ```     
     - docker-compose build
     - docker-compose up -d
    ```
