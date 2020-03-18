@@ -10,16 +10,15 @@ As a mock user you have two options:
 1) Download docker image from DockerHub
     - you just need to run the Docker run command with concrete image:
     ```
-    e.g. docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
+    e.g. $ docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
     ```
-2) Build container with docker-compose from folder which you obtained
-        ```
-- open the terminal in the directory of folder with mock  
-        ```
-   ```     
-    - docker-compose build
-    - docker-compose up -d
-   ```
+2) Build container with docker-compose from folder which you obtained    
+    - open the terminal in the directory of folder with mock       
+    ```
+    $ cd /dirPath/MockFW
+    $ docker-compose build
+    $ docker-compose up -d
+    ```
 
 ## Instructions for FW user in Caché
 The main class which take care of the mocks is MockManager. It allows:
@@ -57,11 +56,26 @@ The class REST is responsible for REST inteface of the mocks
 
 
 ## Instructions for FW user to distribute mock via Docker
+To distribute mock via Docker, first it is neccessary to get prepared directory from the git. 
+1) Simple version with only quering the mock. Clone:
+    ```
+    git clone https://github.com/xtuzil/MockFW.git
+    ```
+2) Complex version with support modifying mock and other options. Clone:
+    ```
+    git clone "some other url"
+    ```
 
+Second, export mock data:
+- in Caché:
+    ```
+    MockManager.ExportMock(mockName, dirPath)
+    ```
+    - dirPath has to be directory src in folder MockFW from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere there.
 
-
-
-
+Then, there to option to distribute the mock:
+1) Build the container and push it to Docker hub. The user will launch the mock with one command
+2) Send the directory to mock user 
 
 
 
