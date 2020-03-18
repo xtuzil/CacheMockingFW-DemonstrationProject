@@ -8,7 +8,10 @@ This needs to have docker installed.
 ## Instructions for docker mock user 
 As a mock user you have two options:
 1) Download docker image from DockerHub
-    - you just need to run the Docker run command, e.g. docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
+    - you just need to run the Docker run command:
+    ```
+    e.g. docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
+    ```
 2) Build container with docker-compose from folder
     - open the terminal in the directory of folder with mock
     - docker-compose build
@@ -33,14 +36,18 @@ The main class which take care of the mocks is MockManager. It allows:
     GetAllMocks(), GetAllMethods(NameOfTheMock), ExportMockToCSV(NameOfTheMock), DeleteMock(NameOfTheMock), DeleteMethod(NameOfTheMock, NameOfTheMethod), DeleteMethodWithParametr(NameOfTheMock, NameOfTheMethod, Parameters), CleanAll())
     ```
 
-After creating mock, it is generated the class of the mock in 'Mocks' repozitary. Now you can add some mocked methods to mock and also get the response which you set up before.
-    - SaveMethod(NameOfTheMethod, params, returnValue, *restMethod)
-        - params and return Value can be string or object
-        - restMehod is optionally, you can set mocked method for acces via request
-        - if you put "DEFAULT" as a params then whenever you call this method with unknow params, it responses you this returnValue
-        - e.g. do ##class(ZK.Mocks.Test).SaveMethod("test", "{"Halo":"Ano"}", "return")
-    - To get responses from mocked methods of mock, just call name method on the mock with params.
-        - e.g. write ##class(ZK.Mocks.Test).test("{"Halo":"Ano"}")
+After creating mock, it is generated the class of the mock in 'Mocks' repositary. Now you can add some mocked methods to mock and also get the response which you set up before.
+- SaveMethod(NameOfTheMethod, params, returnValue, *restMethod)
+    - params and return Value can be string or object
+    - restMehod is optionally, you can set mocked method for acces via request
+    - if you put "DEFAULT" as a params then whenever you call this method with unknow params, it responses you this returnValue
+    ```
+    e.g. do ##class(ZK.Mocks.Test).SaveMethod("test", "{"Halo":"Ano"}", "return")
+    ```
+- To get responses from mocked methods of mock, just call name method on the mock with params.
+    ```
+    e.g. write ##class(ZK.Mocks.Test).test("{"Halo":"Ano"}")
+    ```
 
 The class REST is responsible for REST inteface of the mocks
 
