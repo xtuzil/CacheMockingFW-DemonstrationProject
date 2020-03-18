@@ -8,14 +8,16 @@ This needs to have docker installed.
 ## Instructions for docker mock user 
 As a mock user you have two options:
 1) Download docker image from DockerHub
-    - you just need to run the Docker run command:
+    - you just need to run the Docker run command with concrete image:
     ```
     e.g. docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
     ```
-2) Build container with docker-compose from folder
+2) Build container with docker-compose from folder which you obtained
+   ```
     - open the terminal in the directory of folder with mock
     - docker-compose build
-    - docker compose up -d
+    - docker-compose up -d
+   ```
 
 ## Instructions for FW user in Caché
 The main class which take care of the mocks is MockManager. It allows:

@@ -5,10 +5,12 @@ XData setup
 {
 <Manifest>
   <Default Name="SourceDir" Value="#{$system.Process.CurrentDirectory()}src"/>
-  <Default Name="Namespace" Value="IRISAPP"/>
+  <Default Name="Namespace" Value="MOCKFW"/>
   <Default Name="app" Value="mockfw"/>
   <Default Name="cspapp" Value="/api/${app}/"/>
-  <!--<Default Name="cspappname" Value="/api/mock/"/>-->
+  <Default Name="dispatchclass" Value="ZK.REST"/>
+  <Default Name="username" Value="mockuser"/>
+  <Default Name="password" Value="12345"/>
 
   <Namespace Name="${Namespace}" Code="${Namespace}" Data="${Namespace}" Create="yes" Ensemble="no">
 
@@ -33,7 +35,14 @@ XData setup
   <Namespace Name="${CURRENTNS}">
   <Invoke Class="${CURRENTCLASS}" Method="SetDispatchClass" CheckStatus="true">
   <Arg Value="${cspapp}"/>
-  <Arg Value="ZK.REST"/>
+  <Arg Value="${dispatchclass}"/>
+  </Invoke>
+  </Namespace>
+
+  <Namespace Name="${CURRENTNS}">
+  <Invoke Class="${CURRENTCLASS}" Method="SetUser" CheckStatus="true">
+  <Arg Value="${username}"/>
+  <Arg Value="${password}"/>
   </Invoke>
   </Namespace>
 
@@ -63,6 +72,21 @@ ClassMethod SetDispatchClass(pCSPName As %String = "", pDispatchClass As %String
     set props("DispatchClass")=pDispatchClass
     set props("Recurse")=1
     d ##class(Security.Applications).Modify(pCSPName,.props)
+    quit $$$OK
+}
+
+ClassMethod SetUser(username As %String = "", password As %String = "") As %Status
+{
+    new $namespace
+    znspace "%SYS"
+    set props("Username")=username
+    set props("PasswordNeverExpires")=1
+    set props("Roles")="%All"
+    set props("NameSpace")="MOCKFW"
+    set props("FullName")="User of Mock"
+    set props("Enabled")=1
+    set props("PasswordExternal")=password
+    do ##class(Security.Users).Create(username,.props)
     quit $$$OK
 }
 

@@ -1,8 +1,6 @@
 Class ZK.REST.Base Extends %CSP.REST
 {
 
-Parameter DOMAIN = "Sigan";
-
 Parameter CHARSET = "utf-8";
 
 Parameter CONTENTTYPE = "application/json";

@@ -4,7 +4,7 @@
         "Dockerfile*": "dockerfile",
       },
     "objectscript.conn" :{
-      "ns": "IRISAPP",
+      "ns": "MOCKFW",
       "active": true,
       "docker-compose": {
         "service": "iris",

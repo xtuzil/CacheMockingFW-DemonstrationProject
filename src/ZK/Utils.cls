@@ -17,25 +17,6 @@ ClassMethod CutExtraQuotes(string As %String)
 	}
 	
 	return result
-	
-	
-	/*
-	set del = ""
-	Set list = $ListFromString(string,del)
-	Set n = $ListLength(list)
-	For i=1:1:n {
-		Set piece = $List(list,i)
-		w !, piece
-		//Do something with piece...
-	}
-	
-	w string
-	Set list = $ListFromString(string,"")
-	Set pointer = 0
-	set result = ""
-	While $ListNext(list,pointer,piece) {
-		w !, pointer
-	}*/
 }
 
 ClassMethod Compare(savedObject, params)
@@ -130,7 +111,7 @@ Storage Default
 <IdLocation>^ZK.UtilsD</IdLocation>
 <IndexLocation>^ZK.UtilsI</IndexLocation>
 <StreamLocation>^ZK.UtilsS</StreamLocation>
-<Type>%Library.CacheStorage</Type>
+<Type>%Storage.Persistent</Type>
 }
 
 }

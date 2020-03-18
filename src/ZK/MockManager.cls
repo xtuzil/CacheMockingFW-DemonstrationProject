@@ -3,9 +3,6 @@ Class ZK.MockManager Extends (%Persistent, ZK.Utils)
 
 ClassMethod CreateMock(className As %String)
 {
-
-	w "trying create mock", !
-	
 	set fullClassName = "ZK.Mocks."_className
 	
 	If (##class(%Dictionary.ClassDefinition).%Exists(fullClassName)) {
@@ -99,14 +96,11 @@ ClassMethod ExportMockClass(mockName As %String, dirPath As %String)
 	do $system.OBJ.Export(fullClassName, filePath)
 }
 
-
 /// get all created mocks
 ClassMethod GetAllMocks()
 {
 	//TODO: viz comment
 }
-
-
 
 /// get all mocked methods from mockName as list
 ClassMethod GetAllMethods(mockName As %String)
@@ -114,20 +108,20 @@ ClassMethod GetAllMethods(mockName As %String)
 	//TODO:	Metoda by mela vratit seznam vsech mockovanych metod a v nem seznam parametru a odpovedi
 }
 
-
-ClassMethod ExportMockToCSV(mockName As %String) {
+ClassMethod ExportMockToCSV(mockName As %String)
+{
 	//TODO:
 }
 
-
-ClassMethod DeleteMethod(mockName As %String, methodName As %String) {
+ClassMethod DeleteMethod(mockName As %String, methodName As %String)
+{
 	//TODO:
 }
 
-ClassMethod DeleteMethodWithParametr(mockName As %String, methodName As %String, params) {
+ClassMethod DeleteMethodWithParametr(mockName As %String, methodName As %String, params)
+{
 	//TODO:
 }
-
 
 /// clean global from this mock and delete this class definition
 ClassMethod DeleteMock(mockName As %String)
@@ -156,7 +150,7 @@ Storage Default
 <IdLocation>^ZK.MockManagerD</IdLocation>
 <IndexLocation>^ZK.MockManagerI</IndexLocation>
 <StreamLocation>^ZK.MockManagerS</StreamLocation>
-<Type>%Library.CacheStorage</Type>
+<Type>%Storage.Persistent</Type>
 }
 
 }
