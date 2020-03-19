@@ -8,7 +8,7 @@ XData setup
   <Default Name="Namespace" Value="MOCKFW"/>
   <Default Name="app" Value="mockfw"/>
   <Default Name="cspapp" Value="/api/${app}/"/>
-  <Default Name="dispatchclass" Value="ZK.REST"/>
+  <Default Name="dispatchclass" Value="MockFW.REST"/>
   <Default Name="username" Value="mockuser"/>
   <Default Name="password" Value="12345"/>
 
@@ -90,10 +90,11 @@ ClassMethod SetUser(username As %String = "", password As %String = "") As %Stat
     quit $$$OK
 }
 
-ClassMethod ImportMockData() {
+ClassMethod ImportMockData()
+{
 
-  do ##class(%Library.Global).Import(,"*","dataGlobal.gof")
-  do $system.OBJ.Load(".", "ck")
+  do ##class(%Library.Global).Import(,"*","./Data/dataGlobal.gof")
+  do $system.OBJ.Load("./Data", "ck")
   quit $$$OK
 }
 

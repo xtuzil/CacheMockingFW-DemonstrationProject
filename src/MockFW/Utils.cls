@@ -1,4 +1,4 @@
-Class ZK.Utils Extends %Persistent
+Class MockFW.Utils Extends %Persistent
 {
 
 ClassMethod CutExtraQuotes(string As %String)
@@ -106,11 +106,11 @@ Storage Default
 <Value>%%CLASSNAME</Value>
 </Value>
 </Data>
-<DataLocation>^ZK.UtilsD</DataLocation>
+<DataLocation>^MockFW.UtilsD</DataLocation>
 <DefaultData>UtilsDefaultData</DefaultData>
-<IdLocation>^ZK.UtilsD</IdLocation>
-<IndexLocation>^ZK.UtilsI</IndexLocation>
-<StreamLocation>^ZK.UtilsS</StreamLocation>
+<IdLocation>^MockFW.UtilsD</IdLocation>
+<IndexLocation>^MockFW.UtilsI</IndexLocation>
+<StreamLocation>^MockFW.UtilsS</StreamLocation>
 <Type>%Storage.Persistent</Type>
 }
 

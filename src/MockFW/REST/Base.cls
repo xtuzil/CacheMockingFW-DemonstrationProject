@@ -1,4 +1,4 @@
-Class ZK.REST.Base Extends %CSP.REST
+Class MockFW.REST.Base Extends %CSP.REST
 {
 
 Parameter CHARSET = "utf-8";

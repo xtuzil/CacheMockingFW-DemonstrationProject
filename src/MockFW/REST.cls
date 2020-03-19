@@ -1,4 +1,4 @@
-Class ZK.REST Extends (ZK.REST.Base, ZK.REST.Utils, %CSP.REST)
+Class MockFW.REST Extends (MockFW.REST.Base, MockFW.REST.Utils, %CSP.REST)
 {
 
 XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
@@ -26,7 +26,7 @@ ClassMethod Dispatch(mockName, methodName)
 	try{
 		$$$ThrowOnError(..ReadRequestToObject(.obj))
 		set method = %request.Method
-		set tSC = ##class(ZK.MockBase).GetMockedResponseREST(mockName, methodName, method, obj, .response)
+		set tSC = ##class(MockFW.MockBase).GetMockedResponseREST(mockName, methodName, method, obj, .response)
 		if (response="") || (tSC=0) {
 			    return ..WriteErrorResponse(mockName,methodName,SC)
 		}

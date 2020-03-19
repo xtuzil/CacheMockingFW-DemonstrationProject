@@ -1,7 +1,7 @@
 # taking image from docker hub
 FROM store/intersystems/iris-community:2020.1.0.199.0
 
-#setting user name
+#setting user name on root
 USER root
 
 # setting work directory
@@ -19,7 +19,8 @@ COPY irissession.sh /
 # change shell to do objectsript commands
 SHELL ["/irissession.sh"]
 
-RUN \
+# launch Installer in iris shell
+RUN \ 
   do $SYSTEM.OBJ.Load("Installer.cls", "ck") \
   set sc = ##class(App.Installer).setup() 
 

@@ -1,9 +1,9 @@
-Class ZK.MockManager Extends (%Persistent, ZK.Utils)
+Class MockFW.MockManager Extends (%Persistent, MockFW.Utils)
 {
 
 ClassMethod CreateMock(className As %String)
 {
-	set fullClassName = "ZK.Mocks."_className
+	set fullClassName = "MockFW.Mocks."_className
 	
 	If (##class(%Dictionary.ClassDefinition).%Exists(fullClassName)) {
 		w "Mock s timhle nazvem jiz existuje"
@@ -14,7 +14,7 @@ ClassMethod CreateMock(className As %String)
 	set classDef.Name=fullClassName
 	set classDef.ProcedureBlock=1
 	
-	set classDef.Super = "ZK.MockBase"
+	set classDef.Super = "MockFW.MockBase"
 	
 	set methodDef = ##class(%Dictionary.MethodDefinition).%New()
 	set methodDef.Name = "SaveMethod"	
@@ -31,7 +31,7 @@ ClassMethod CreateMock(className As %String)
 	set methodDef.ClassMethod = "1"
 	set methodDef.FormalSpec="Class:%String,methodName:%String,Args..."
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE(Class,""."",3) ")
-	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(ZK.MockBase).MethodCalled(mockName, methodName, Args...)")
+	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)")
 
 	
 	do classDef.Methods.Insert(methodDef)
@@ -66,7 +66,7 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
      }
      
      if mockName'= "Name of the Mock" { // We do not want to take first line
-     	do ##class(ZK.MockBase).SaveMethod(mockName, methodName, params, response, restMethod)                  
+     	do ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod)                  
      }
    }
 }
@@ -91,7 +91,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String)
 
 ClassMethod ExportMockClass(mockName As %String, dirPath As %String)
 {
-	set fullClassName = "ZK.Mocks."_mockName_".cls"
+	set fullClassName = "MockFW.Mocks."_mockName_".cls"
 	set filePath = dirPath_"\mockClass.xml"
 	do $system.OBJ.Export(fullClassName, filePath)
 }
@@ -135,7 +135,7 @@ ClassMethod DeleteMock(mockName As %String)
 ClassMethod CleanAll()
 {
 	Kill ^MockMat
-	quit ##class(%SYSTEM.OBJ).DeletePackage("ZK.Mocks")
+	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
 }
 
 Storage Default
@@ -145,11 +145,11 @@ Storage Default
 <Value>%%CLASSNAME</Value>
 </Value>
 </Data>
-<DataLocation>^ZK.MockManagerD</DataLocation>
+<DataLocation>^MockFW.MockManagerD</DataLocation>
 <DefaultData>MockManagerDefaultData</DefaultData>
-<IdLocation>^ZK.MockManagerD</IdLocation>
-<IndexLocation>^ZK.MockManagerI</IndexLocation>
-<StreamLocation>^ZK.MockManagerS</StreamLocation>
+<IdLocation>^MockFW.MockManagerD</IdLocation>
+<IndexLocation>^MockFW.MockManagerI</IndexLocation>
+<StreamLocation>^MockFW.MockManagerS</StreamLocation>
 <Type>%Storage.Persistent</Type>
 }
 

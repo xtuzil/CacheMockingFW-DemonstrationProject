@@ -1,4 +1,4 @@
-Class ZK.REST.Utils Extends (%iKnow.REST.Utils, %CSP.REST, ZK.Utils)
+Class MockFW.REST.Utils Extends (%iKnow.REST.Utils, %CSP.REST, MockFW.Utils)
 {
 
 ClassMethod ReadRequestToObject(Output obj, setIfNone = "", convertToUtf8 = 1) As %Status

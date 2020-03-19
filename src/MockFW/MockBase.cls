@@ -1,4 +1,4 @@
-Class ZK.MockBase Extends (%Persistent, ZK.Utils)
+Class MockFW.MockBase Extends (%Persistent, MockFW.Utils)
 {
 
 ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "")
@@ -137,11 +137,11 @@ Storage Default
 <Value>%%CLASSNAME</Value>
 </Value>
 </Data>
-<DataLocation>^ZK.MockBaseD</DataLocation>
+<DataLocation>^MockFW.MockBaseD</DataLocation>
 <DefaultData>MockBaseDefaultData</DefaultData>
-<IdLocation>^ZK.MockBaseD</IdLocation>
-<IndexLocation>^ZK.MockBaseI</IndexLocation>
-<StreamLocation>^ZK.MockBaseS</StreamLocation>
+<IdLocation>^MockFW.MockBaseD</IdLocation>
+<IndexLocation>^MockFW.MockBaseI</IndexLocation>
+<StreamLocation>^MockFW.MockBaseS</StreamLocation>
 <Type>%Library.CacheStorage</Type>
 }
 
