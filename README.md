@@ -70,23 +70,21 @@ Second, export mock data:
     ```
     MOCKFW>do ##class(MockFW.MockManager).ExportMock(mockName, dirPath)
     ```
-    - dirPath has to be directory in folder MockFW/src/Data from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere there.
+    - dirPath has to be directory in folder MockFW/src/Data from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere else.
 
 Then, there are to option to distribute the mock:
 1) Build the container and push it to Docker hub. The user will launch the mock with one command.
     - This needs to have account at https://hub.docker.com and to create repositary there.
-    - Build the image and run the container
+    - Build the image
         ```
         $ docker-compose build
-        $ docker-compose up -d
         ```
-    - Then save the new image by finding the container ID (using **docker ps**) and then committing it to a new image name.
+    - Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
         ```
-        $ docker commit c16378f943fe(ID) mock1
+        $ docker tag mock1 registry-host:mock1
         ```
     - Now, push the image to the registry using the image ID.
         ```
-        $ docker tag mock1 registry-host:mock1
         $ docker push registry-host:mock1
         ```
 2) Send the directory to mock user. Then the user has to build image from this folder.
