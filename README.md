@@ -18,13 +18,13 @@ As a mock user you have two options:
     $ docker-compose build
     $ docker-compose up -d
     ```
-Let the Docker start the app. App listen on port 9092. In complex version of the mock, it is possible to call method from terminal. Refresh app in VS Code or:
+Let the Docker start the app. App listen on port 9092. In complex version of the mock, it is possible to call method from terminal. Refresh app in VS Code or:\
     ```
     $ docker exec -it mock iris session IRIS
     $ USER> zn "MOCKFW"
     ```
-To log in (e.g. on Postman) use username: 'mockuser' and password:'12345'
-If the version of distribution support managment portal, use: http://localhost:9092/csp/sys/UtilHome.csp
+\To log in (e.g. on Postman) use username: 'mockuser' and password:'12345'
+\If the version of distribution support managment portal, use: http://localhost:9092/csp/sys/UtilHome.csp
 
 ## Instructions for FW user in Caché
 The main class which take care of the mocks is MockManager. It allows:
