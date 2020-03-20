@@ -1,5 +1,5 @@
 ## MockFW users template
-This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template.
+This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template from: https://github.com/intersystems-community/objectscript-docker-template
 
 ## Prerequisites
 This needs to have docker installed.
