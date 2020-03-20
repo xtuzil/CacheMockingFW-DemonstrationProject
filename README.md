@@ -1,6 +1,5 @@
 ## intersystems-objectscript-template
-This is a template for InterSystems ObjectScript Github repository.
-The template goes also with a few files which let you immedietly compile your ObjecScript files in InterSystems IRIS Community Edition in a docker container
+This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template.
 
 ## Prerequisites
 This needs to have docker installed.
@@ -71,7 +70,7 @@ Second, export mock data:
     ```
     MOCKFW>do ##class(MockFW.MockManager).ExportMock(mockName, dirPath)
     ```
-    - dirPath has to be directory src in folder MockFW from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere there.
+    - dirPath has to be directory in folder MockFW/src/Data from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere there.
 
 Then, there are to option to distribute the mock:
 1) Build the container and push it to Docker hub. The user will launch the mock with one command.
@@ -92,64 +91,5 @@ Then, there are to option to distribute the mock:
         ```
 2) Send the directory to mock user. Then the user has to build image from this folder.
     ```
-    e.g. $ zip MockFW.zip MockFW
+    e.g. $ zip -r MockFW.zip MockFW
     ```
-
-
-
-
-
-
-
-
-
-
-## Installation 
-
-Clone/git pull the repo into any local directory
-
-```
-$ git clone https://github.com/your-repository.git
-```
-
-Open the terminal in this directory and run:
-
-```
-$ docker-compose build
-```
-
-3. Run the IRIS container with your project:
-
-```
-$ docker-compose up -d
-```
-
-## How to Test it
-
-Open IRIS terminal:
-
-```
-$ docker-compose exec iris iris session iris
-USER>zn "IRISAPP"
-IRISAPP>write ##class(PackageSample.ObjectScript).Test()
-```
-## How to start coding
-This repository is ready to code in VSCode with ObjectScript plugin.
-Install [VSCode](https://code.visualstudio.com/) and [ObjectScript](https://marketplace.visualstudio.com/items?itemName=daimor.vscode-objectscript) plugin and open the folder in VSCode.
-Open /src/cls/PackageSample/ObjectScript.cls class and try to make changes - it will be compiled in running IRIS docker container.
-
-Feel free to delete PackageSample folder and place your ObjectScript classes in a form
-/src/cls/Package/Classname.cls
-
-The script in Installer.cls will import everything you place under /src/cls into IRIS.
-
-## What's insde the repo
-
-# Dockerfile
-
-The simplest dockerfile which starts IRIS and imports Installer.cls and then runs the Installer.setup method, which creates IRISAPP Namespace and imports ObjectScript code from /src folder into it.
-Use the related docker-compose.yml to easily setup additional parametes like port number and where you map keys and host folders.
-
-# .vscode/settings.json
-
-Settings file to let you immedietly code in VSCode with [VSCode ObjectScript plugin](https://marketplace.visualstudio.com/items?itemName=daimor.vscode-objectscript))

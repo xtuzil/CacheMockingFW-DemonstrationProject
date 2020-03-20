@@ -94,7 +94,7 @@ ClassMethod ImportMockData()
 {
 
   do ##class(%Library.Global).Import(,"*","./Data/dataGlobal.gof")
-  do $system.OBJ.Load("./Data", "ck")
+  do $system.OBJ.Load("./Data/*", "ck")
   quit $$$OK
 }
 

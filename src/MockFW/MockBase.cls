@@ -1,4 +1,4 @@
-Class MockFW.MockBase Extends (%Persistent, MockFW.Utils)
+Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils)
 {
 
 ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "")
@@ -129,20 +129,4 @@ ClassMethod TransformArgsToList(args...) As %List
    
    quit listArgs
 }
-
-Storage Default
-{
-<Data name="MockBaseDefaultData">
-<Value name="1">
-<Value>%%CLASSNAME</Value>
-</Value>
-</Data>
-<DataLocation>^MockFW.MockBaseD</DataLocation>
-<DefaultData>MockBaseDefaultData</DefaultData>
-<IdLocation>^MockFW.MockBaseD</IdLocation>
-<IndexLocation>^MockFW.MockBaseI</IndexLocation>
-<StreamLocation>^MockFW.MockBaseS</StreamLocation>
-<Type>%Library.CacheStorage</Type>
-}
-
 }

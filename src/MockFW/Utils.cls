@@ -1,4 +1,4 @@
-Class MockFW.Utils Extends %Persistent
+Class MockFW.Utils Extends %RegisteredObject
 {
 
 ClassMethod CutExtraQuotes(string As %String)
@@ -97,21 +97,6 @@ ClassMethod CountAtributes(obj)
     }
     
     return count
-}
-
-Storage Default
-{
-<Data name="UtilsDefaultData">
-<Value name="1">
-<Value>%%CLASSNAME</Value>
-</Value>
-</Data>
-<DataLocation>^MockFW.UtilsD</DataLocation>
-<DefaultData>UtilsDefaultData</DefaultData>
-<IdLocation>^MockFW.UtilsD</IdLocation>
-<IndexLocation>^MockFW.UtilsI</IndexLocation>
-<StreamLocation>^MockFW.UtilsS</StreamLocation>
-<Type>%Storage.Persistent</Type>
 }
 
 }

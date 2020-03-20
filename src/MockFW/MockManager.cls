@@ -1,4 +1,4 @@
-Class MockFW.MockManager Extends (%Persistent, MockFW.Utils)
+Class MockFW.MockManager Extends (%RegisteredObject, MockFW.Utils)
 {
 
 ClassMethod CreateMock(className As %String)
@@ -136,21 +136,6 @@ ClassMethod CleanAll()
 {
 	Kill ^MockMat
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
-}
-
-Storage Default
-{
-<Data name="MockManagerDefaultData">
-<Value name="1">
-<Value>%%CLASSNAME</Value>
-</Value>
-</Data>
-<DataLocation>^MockFW.MockManagerD</DataLocation>
-<DefaultData>MockManagerDefaultData</DefaultData>
-<IdLocation>^MockFW.MockManagerD</IdLocation>
-<IndexLocation>^MockFW.MockManagerI</IndexLocation>
-<StreamLocation>^MockFW.MockManagerS</StreamLocation>
-<Type>%Storage.Persistent</Type>
 }
 
 }
