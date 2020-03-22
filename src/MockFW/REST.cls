@@ -18,6 +18,7 @@ ClassMethod HelloWorld(name)
 	q $$$OK
 }
 
+/// Dispatch method which is called for every endpoint. Distribute the request to the MockBase class
 ClassMethod Dispatch(mockName, methodName)
 {
 	set SC=$$$OK

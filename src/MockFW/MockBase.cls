@@ -1,6 +1,7 @@
 Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils)
 {
 
+/// Save method of Mock to the global if does not already exist
 ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "")
 {
 		
@@ -53,6 +54,7 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 	quit $$$OK
 }
 
+/// Return right data when specific method is called
 ClassMethod MethodCalled(class As %String, methodName As %String, Args...)
 {
 	set response = {}
@@ -72,6 +74,7 @@ ClassMethod MethodCalled(class As %String, methodName As %String, Args...)
 	return response
 }
 
+/// Retrieve right data from global if the method with specific parameters is mocked
 ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params, Output response)
 {
 	set response=""
@@ -91,6 +94,7 @@ ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params
  	quit '$$$OK
 }
 
+/// Retrieve right data from global if the method with specific parameters is mocked. REST version.
 ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response)
 {
 	set response=""
@@ -112,19 +116,6 @@ ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, me
  		quit $$$OK
  	}
  	quit '$$$OK
-}
-
-ClassMethod TransformArgsToList(args...) As %List
-{
-   // Create a %ListOfDataTypes even though it may contain objects.
-   #dim listArgs = ##class(%ListOfDataTypes).%New()
-   #dim i AS %Integer
-   for i = 1 : 1 : $get(args, 0)
-   {
-      do listArgs.Insert($get(args(i)))
-   }
-   
-   quit listArgs
 }
 
 }

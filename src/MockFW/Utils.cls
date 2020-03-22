@@ -1,6 +1,8 @@
 Class MockFW.Utils Extends %RegisteredObject
 {
 
+/// Auxiliary method for retrieving from .csv.
+/// Cut extra double quotes to secure saving
 ClassMethod CutExtraQuotes(string As %String) As %String
 {
 	set n = $Length(string)
@@ -19,6 +21,7 @@ ClassMethod CutExtraQuotes(string As %String) As %String
 	return result
 }
 
+/// Compare two strings (potentionally objects)
 ClassMethod Compare(savedObject, params) As %Integer
 {
 	//todo: Prvne overit, jestli je pocet atributu stejny
@@ -63,6 +66,8 @@ ClassMethod Compare(savedObject, params) As %Integer
 	return 0
 }
 
+/// Return '1' if the string can be transformed to the object, else '0'
+/// Use regex syntax. Work right only for two layers of json object 
 ClassMethod CanConvertToJSON(obj) As %Integer
 {
 	set objWithoutSpaces = $ZSTRIP(obj,"*W")
@@ -80,6 +85,7 @@ ClassMethod CanConvertToJSON(obj) As %Integer
 	return $match(objWithoutSpaces, regex)
 }
 
+/// Auxiliary method. Count the atributes of object
 ClassMethod CountAtributes(obj) As %Integer
 {
 	#dim count As %Integer = 0 
@@ -92,6 +98,7 @@ ClassMethod CountAtributes(obj) As %Integer
     return count
 }
 
+/// Transfrom arguments to the list as %ListOfDataTypes
 ClassMethod TransformArgsToList(args...) As %List
 {
    // Create a %ListOfDataTypes even though it may contain objects.

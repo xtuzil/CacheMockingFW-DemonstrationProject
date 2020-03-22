@@ -1,6 +1,8 @@
 Class MockFW.MockManager Extends (%RegisteredObject, MockFW.Utils)
 {
 
+/// Creates new mock class if does not exist already. 
+/// Generates class definition in 'MockFW.Mocks' to be possible calling methods on this class.
 ClassMethod CreateMock(className As %String) As %Status
 {
 	set fullClassName = "MockFW.Mocks."_className
@@ -41,6 +43,8 @@ ClassMethod CreateMock(className As %String) As %Status
    	quit ##class(%SYSTEM.OBJ).Compile(fullClassName)
 }
 
+/// Import mock and mocks data from .csv file
+/// Import proccess from the second line with format 'Name of the Mock; Method; parameters; Response; Rest method'
 ClassMethod MockMethodsFromCSV(filePath As %String)
 {
    	set stream=##class(%Stream.FileCharacter).%New()
@@ -71,10 +75,10 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
 	quit $$$OK
 }
 
-// mockName = e.g. MyMock
-
-// dirPath = directory where you have folder with Iris docker + /durable/src
-
+/// Is used when closing REST API into Docker
+/// Export Mock class and Mock data as a two files (.xml a .gof)
+/// dirPath = directory where you have folder with Iris docker + /durable/src
+/// mockName = e.g. MyMock
 ClassMethod ExportMock(mockName As %String, dirPath As %String) As %Status
 {
 	set className = "MockFW.Mocks."_mockName
@@ -89,6 +93,7 @@ ClassMethod ExportMock(mockName As %String, dirPath As %String) As %Status
 	quit $$$OK
 }
 
+/// Auxiliary method, exports Mocks data
 ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status
 {
 	set global = "MockMat("_mockName
@@ -96,6 +101,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status
 	quit ##class(%Library.Global).Export(,global,filePath)
 }
 
+/// Auxiliary method, exports Mock class
 ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status
 {
 	set fullClassName = "MockFW.Mocks."_mockName_".cls"
@@ -103,7 +109,7 @@ ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status
 	quit $system.OBJ.Export(fullClassName, filePath)
 }
 
-/// get all created mocks
+/// Return all mocks as a %ListOfDataTypes and also write the list
 ClassMethod GetAllMocks()
 {
 	#dim listMocks = ##class(%ListOfDataTypes).%New()
@@ -116,7 +122,7 @@ ClassMethod GetAllMocks()
 	quit listMocks
 }
 
-/// get all mocked methods from mockName as list
+/// Return all Mock methods as a %ListOfDataTypes and also write the list
 ClassMethod GetAllMethods(mockName As %String)
 {
 	#dim listMethods = ##class(%ListOfDataTypes).%New()
@@ -129,12 +135,14 @@ ClassMethod GetAllMethods(mockName As %String)
 	quit listMethods
 }
 
+/// Delete specific method from specific mock (All records with different parameters)
 ClassMethod DeleteMethod(mockName As %String, methodName As %String)
 {
 	kill ^MockMat(mockName, methodName)
 	quit $$$OK
 }
 
+/// Delete specific method from specific mock with specific parameters
 ClassMethod DeleteMethodWithParametr(mockName As %String, methodName As %String, params, restMethod As %String = "")
 {
 	if ($ISOBJECT(params)) {
@@ -148,14 +156,14 @@ ClassMethod DeleteMethodWithParametr(mockName As %String, methodName As %String,
 	}
 }
 
-/// clean global from this mock and delete this class definition
+/// Delete Mock class definition and also clean global from this Mock (Mocks data)
 ClassMethod DeleteMock(mockName As %String)
 {
 	Kill ^MockMat(mockName)
 	quit ##class(%SYSTEM.OBJ).Delete(mockName)
 }
 
-/// clean whole global and delete mocks class definition
+/// Delete all of the records and data
 ClassMethod CleanAll()
 {
 	Kill ^MockMat
