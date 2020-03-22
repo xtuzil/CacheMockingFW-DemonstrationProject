@@ -28,15 +28,15 @@ ClassMethod Dispatch(mockName, methodName)
 		set method = %request.Method
 		set tSC = ##class(MockFW.MockBase).GetMockedResponseREST(mockName, methodName, method, obj, .response)
 		if (response="") || (tSC=0) {
-			    return ..WriteErrorResponse(mockName,methodName,SC)
+			    return ..WriteErrorResponse(mockName,methodName,tSC)
 		}
-		return ..WriteResponse(response,SC)
+		return ..WriteResponse(response,tSC)
 	}catch exc{
-		set SC=exc.AsStatus()
-		return ..WriteErrorResponse(mockName,methodName,SC)
+		set tSC=exc.AsStatus()
+		return ..WriteErrorResponse(mockName,methodName,tSC)
 	}
 	
-	return SC
+	quit tSC
 }
 
 }

@@ -1,7 +1,7 @@
 Class MockFW.Utils Extends %RegisteredObject
 {
 
-ClassMethod CutExtraQuotes(string As %String)
+ClassMethod CutExtraQuotes(string As %String) As %String
 {
 	set n = $Length(string)
 	set result = ""
@@ -19,7 +19,7 @@ ClassMethod CutExtraQuotes(string As %String)
 	return result
 }
 
-ClassMethod Compare(savedObject, params)
+ClassMethod Compare(savedObject, params) As %Integer
 {
 	//todo: Prvne overit, jestli je pocet atributu stejny
 	// potom Pres jeden iterator vzit vzdy atribut z jednoho, zeptat se, jestli ten kez existuje i ve druhzm a pak porovnat value obou.
@@ -37,8 +37,6 @@ ClassMethod Compare(savedObject, params)
 		set params=params.%ToJSON()
 	}
 	
-	//w !, savedObject , " vs. " , params
-	
 	if (..CanConvertToJSON(savedObject)) && (..CanConvertToJSON(params)) {
 		
 		if ('$ISOBJECT(savedObject)) {
@@ -49,10 +47,9 @@ ClassMethod Compare(savedObject, params)
 		}
 		
 		if ((..CountAtributes(savedObject)) '= (..CountAtributes(params))) {
-		return 0
+			return 0
 		}
 
-		
 		set iterator = params.%GetIterator()
     
     	while iterator.%GetNext(.key, .value) {
@@ -62,34 +59,30 @@ ClassMethod Compare(savedObject, params)
    
 		}
     	return 1
-		
-	
 	}
-	
 	return 0
 }
 
-ClassMethod CanConvertToJSON(obj)
+ClassMethod CanConvertToJSON(obj) As %Integer
 {
-	set item = ".*\:.*"
-	
-	//set regex = "\{(" _ item _ "|.*\:\s*" _  regex _ "|.*\:\s*\[" _ regex _ "\])*\}"
-	
+	set objWithoutSpaces = $ZSTRIP(obj,"*W")
 
+	set item = "\""[:alnum:]+\"""
+	set element = item_"\:"_item
+	set object = "\{("_element_"\,)*"_element_"\}"
+	set array = "\[((("_element_"\,)*"_element_")|(("_object _"\,)*"_object_")|(("_item _"\,)*"_item_"))\]"
+
+	set objectInObject = item_"\:"_object
+	set arrayInObject = item_"\:"_array
+
+	set regex = "\{((("_element_")|("_objectInObject_")|("_arrayInObject_"))\,)*(("_element_")|("_objectInObject_")|("_arrayInObject_"))\}"
 	
-	//set regex = "\{(.*\:.*|.*\:{(.*\:.*)*}|.*\:\[(.*\:.*)*\]|(\,)*)*\}"
-	
-	set regex = "\{(.*\:.*)*\}"
-	
-	//w !, obj, "muze: ", $match(obj, regex)
-	
-	return $match(obj, regex)
+	return $match(objWithoutSpaces, regex)
 }
 
-ClassMethod CountAtributes(obj)
+ClassMethod CountAtributes(obj) As %Integer
 {
-	set count = 0
-	
+	#dim count As %Integer = 0 
 	set iterator = obj.%GetIterator()
     
     while iterator.%GetNext(.key, .value) {
@@ -97,6 +90,19 @@ ClassMethod CountAtributes(obj)
     }
     
     return count
+}
+
+ClassMethod TransformArgsToList(args...) As %List
+{
+   // Create a %ListOfDataTypes even though it may contain objects.
+   #dim listArgs = ##class(%ListOfDataTypes).%New()
+   #dim i AS %Integer
+   for i = 1 : 1 : $get(args, 0)
+   {
+      do listArgs.Insert($get(args(i)))
+   }
+   
+   quit listArgs
 }
 
 }

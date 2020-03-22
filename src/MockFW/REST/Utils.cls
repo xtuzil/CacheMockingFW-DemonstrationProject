@@ -14,13 +14,13 @@ ClassMethod ReadRequestToObject(Output obj, setIfNone = "", convertToUtf8 = 1) A
 		set SC=exc.AsStatus()
 	}
 	
-	return SC
+	quit SC
 }
 
 ClassMethod WriteResponse(response, SC As %Status, encode As %Boolean = 0) As %Status
 {
-	return:response="" SC
-	return:SC'=$$$OK SC
+	quit:response="" SC
+	quit:SC'=$$$OK SC
 	set stream=##class(%Stream.GlobalCharacter).%New()
 	if '..CanConvertToJSON(response) {
 		set res = {}
@@ -36,7 +36,7 @@ ClassMethod WriteResponse(response, SC As %Status, encode As %Boolean = 0) As %S
 		write:encode=0 stream.Read()
 		write:encode=1 $zconvert(stream.Read(),"I","UTF8")
 	}
-	return SC
+	quit SC
 }
 
 ClassMethod WriteErrorResponse(mockName, methodName, SC As %Status, encode As %Boolean = 0) As %Status
@@ -53,7 +53,7 @@ ClassMethod WriteErrorResponse(mockName, methodName, SC As %Status, encode As %B
 		write:encode=0 stream.Read()
 		write:encode=1 $zconvert(stream.Read(),"I","UTF8")
 	}
-	return SC
+	quit SC
 }
 
 /// This method is to be called as an endpoint itself!
