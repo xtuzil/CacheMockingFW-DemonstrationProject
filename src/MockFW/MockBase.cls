@@ -1,8 +1,8 @@
-Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils)
+Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils, %SYSTEM.Event)
 {
 
 /// Save method of Mock to the global if does not already exist
-ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", force = 0) As %Status
+ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", code = 200, delay = 0, force = 0) As %Status
 {
 	
 	if (restMethod="GET") {
@@ -52,6 +52,8 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 		}
 		
 		set ^MockMat(mockName, methodName, restMethod, params) = response
+		set ^MockMat(mockName, methodName, restMethod, params, "code") = code
+		set ^MockMat(mockName, methodName, restMethod, params, "delay") = delay
 	}
 	
 	w !, "Saved!"
@@ -99,7 +101,7 @@ ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params
 }
 
 /// Retrieve right data from global if the method with specific parameters is mocked. REST version.
-ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response) As %Status
+ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response, Output code) As %Status
 {
 	set response=""
 	if method="GET" {
@@ -111,14 +113,21 @@ ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, me
      	set sc = ..Compare(key, body)
      	if sc=1 {
      		set response = ^MockMat(mockName, methodName, method, key)
+			set code = ^MockMat(mockName, methodName, method, key, "code")
+			set delay = ^MockMat(mockName, methodName, method, key, "delay")
+			hang delay
      		return $$$OK
      	}
      	s key = $Order(^MockMat(mockName, methodName, method,key)) // next subscript
  	}
  	if $Data(^MockMat(mockName, methodName, method, "DEFAULT")) {
  		set response = ^MockMat(mockName, methodName, method, "DEFAULT")
+		set code = ^MockMat(mockName, methodName, method, key, "code")
+		set delay = ^MockMat(mockName, methodName, method, key, "delay")
+		hang delay
  		quit $$$OK
  	}
+	
  	quit '$$$OK
 }
 

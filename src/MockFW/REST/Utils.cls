@@ -17,10 +17,12 @@ ClassMethod ReadRequestToObject(Output obj, setIfNone = "", convertToUtf8 = 1) A
 	quit SC
 }
 
-ClassMethod WriteResponse(response, SC As %Status, encode As %Boolean = 0) As %Status
+ClassMethod WriteResponse(response, code, SC As %Status, encode As %Boolean = 0) As %Status
 {
 	quit:response="" SC
 	quit:SC'=$$$OK SC
+	set %response.Status = code
+
 	set stream=##class(%Stream.GlobalCharacter).%New()
 	if '..CanConvertToJSON(response) {
 		set res = {}
@@ -72,7 +74,9 @@ ClassMethod GetQuery() As %String
 		set query = query_key_"="_val
 		set key = $ORDER(%request.Data(key))
 	}
-
+	if query = "?" {
+		return ""
+	}
 	return query
 }
 

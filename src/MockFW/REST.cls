@@ -23,16 +23,17 @@ ClassMethod Dispatch(mockName, methodName)
 {
 	set SC=$$$OK
 	set response={}
+	set code =""
 	set obj=""
-	set mockName = mockName_..GetQuery()
+	set methodName = methodName_..GetQuery()
 	try{
 		$$$ThrowOnError(..ReadRequestToObject(.obj))
 		set method = %request.Method
-		set tSC = ##class(MockFW.MockBase).GetMockedResponseREST(mockName, methodName, method, obj, .response)
+		set tSC = ##class(MockFW.MockBase).GetMockedResponseREST(mockName, methodName, method, obj, .response, .code)
 		if (response="") || (tSC=0) {
 			    return ..WriteErrorResponse(mockName,methodName,tSC)
 		}
-		return ..WriteResponse(response,tSC)
+		return ..WriteResponse(response, code, tSC)
 	}catch exc{
 		set tSC=exc.AsStatus()
 		return ..WriteErrorResponse(mockName,methodName,tSC)

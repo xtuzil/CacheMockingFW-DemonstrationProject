@@ -22,9 +22,10 @@ ClassMethod CreateMock(className As %String) As %Status
 	set methodDef.Name = "SaveMethod"	
 	
 	set methodDef.ClassMethod = "1"
-	set methodDef.FormalSpec="methodName:%String,params,return,restMethod:%String="""""	
+	set methodDef.ReturnType = "%Status"
+	set methodDef.FormalSpec="methodName:%String,params,return,restMethod:%String="""",code=200,delay=0,force=0"	
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE($CLASSNAME(),""."",3) ")
-	do methodDef.Implementation.WriteLine($$$TAB_" do ##super(mockName, methodName, params, return, restMethod)")
+	do methodDef.Implementation.WriteLine($$$TAB_" do ##super(mockName, methodName, params, return, restMethod, code, delay, force)")
 	
 	do classDef.Methods.Insert(methodDef)
 	
@@ -57,6 +58,9 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
      	set params = $PIECE(line,";",3)
      	set response = $PIECE(line,";",4)
      	set restMethod = $PIECE(line,";",5)
+     	set code = $PIECE(line,";",6)
+     	set delay = $PIECE(line,";",7)
+     	set force = $PIECE(line,";",8)
      
      	//Convert to objects because of way how we are saving
      	set params =  ..CutExtraQuotes(params)
@@ -69,15 +73,15 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
      	}
      
      	if mockName'= "Name of the Mock" { // We do not want to take first line
-     		return ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod)                  
+     		do ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)                  
      	}
    	}
 	quit $$$OK
 }
 
-ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", force = 0) As %Status
+ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", code = 200, delay = 0, force = 0) As %Status
 {
-	quit ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, force)
+	quit ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)
 }
 
 /// Is used when closing REST API into Docker
