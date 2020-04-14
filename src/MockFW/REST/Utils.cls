@@ -56,6 +56,26 @@ ClassMethod WriteErrorResponse(mockName, methodName, SC As %Status, encode As %B
 	quit SC
 }
 
+ClassMethod GetQuery() As %String
+{
+	set query = "?"
+	set first = "true"
+	set key = $ORDER(%request.Data(""))
+	while (key '= "") {
+		if first'="true" {
+			set query = query_"&"
+
+		} else {
+			set first = "false" 
+		}
+		set val = $GET(%request.Data(key,1))
+		set query = query_key_"="_val
+		set key = $ORDER(%request.Data(key))
+	}
+
+	return query
+}
+
 /// This method is to be called as an endpoint itself!
 /// <example language="swagger">
 ///       description: Simple endpoint to print this Swagger definition in YAML

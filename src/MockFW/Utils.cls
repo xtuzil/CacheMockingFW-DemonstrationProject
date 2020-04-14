@@ -1,6 +1,15 @@
 Class MockFW.Utils Extends %RegisteredObject
 {
 
+ClassMethod Tabs(count)
+{
+	set res = ""
+	for i=1:1:count {
+		set res = res_$$$TAB
+	}
+	return res
+}
+
 /// Auxiliary method for retrieving from .csv.
 /// Cut extra double quotes to secure saving
 ClassMethod CutExtraQuotes(string As %String) As %String

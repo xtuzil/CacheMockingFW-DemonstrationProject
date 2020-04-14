@@ -5,10 +5,10 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 {
 <Routes>
 <Route Url="/:name" Method="GET" Call="HelloWorld" Cors="false" />
-<Route Url="/:mockName/:methodName" Method="POST" Call="Dispatch" Cors="false" />
-<Route Url="/:mockName/:methodName" Method="GET" Call="Dispatch" Cors="false" />
-<Route Url="/:mockName/:methodName" Method="PUT" Call="Dispatch" Cors="false" />
-<Route Url="/:mockName/:methodName" Method="DELETE" Call="Dispatch" Cors="false" />
+<Route Url="/:mockName/(.+)" Method="POST" Call="Dispatch" Cors="false" />
+<Route Url="/:mockName/(.+)" Method="GET" Call="Dispatch" Cors="false" />
+<Route Url="/:mockName/(.+)" Method="PUT" Call="Dispatch" Cors="false" />
+<Route Url="/:mockName/(.+)" Method="DELETE" Call="Dispatch" Cors="false" />
 </Routes>
 }
 
@@ -23,7 +23,8 @@ ClassMethod Dispatch(mockName, methodName)
 {
 	set SC=$$$OK
 	set response={}
-	set obj="" 
+	set obj=""
+	set mockName = mockName_..GetQuery()
 	try{
 		$$$ThrowOnError(..ReadRequestToObject(.obj))
 		set method = %request.Method

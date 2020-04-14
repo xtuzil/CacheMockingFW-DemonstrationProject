@@ -75,6 +75,11 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
 	quit $$$OK
 }
 
+ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", force = 0) As %Status
+{
+	quit ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, force)
+}
+
 /// Is used when closing REST API into Docker
 /// Export Mock class and Mock data as a two files (.xml a .gof)
 /// dirPath = directory where you have folder with Iris docker + /durable/src
@@ -168,6 +173,151 @@ ClassMethod CleanAll()
 {
 	Kill ^MockMat
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
+}
+
+ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:\Users\tuzilma\Desktop\file.xml") As %Status
+{
+	set file=##class(%File).%New(filePath)
+	do file.Open("WSN")
+	do file.WriteLine("<?xml version=""1.0"" encoding=""UTF-8""?>")
+	do file.WriteLine("<!DOCTYPE book PUBLIC ""-//OASIS//DTD DocBook XML V4.5//EN""")
+	do file.WriteLine("""http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd"">")
+	do file.WriteLine("<book>")
+	do file.WriteLine($$$TAB_"<bookinfo>")
+	do file.WriteLine(..Tabs(2)_"<title>"_mockName_" - Mock documentation</title>")
+	do file.WriteLine(..Tabs(2)_"<author>")
+	do file.WriteLine(..Tabs(3)_"<firstname>"_$USERNAME_"</firstname>")
+	do file.WriteLine(..Tabs(2)_"</author>")
+	do file.WriteLine(..Tabs(2)_"<pubdate>"_$PIECE($ZDATETIME($ZTIMESTAMP,1,1,2)," ", 1)_"</pubdate>")
+	do file.WriteLine($$$TAB_"</bookinfo>")
+	
+	
+	do file.WriteLine($$$TAB_"<chapter>")
+	do file.WriteLine(..Tabs(2)_"<title>MockFW.Mocks."_mockName_"</title>")
+	
+	
+	// first local mocked methods
+	do file.WriteLine(..Tabs(2)_"<section>")
+	do file.WriteLine(..Tabs(3)_"<title>Local mocked methods</title>")
+	do file.WriteLine(..Tabs(3)_"<itemizedlist mark=""opencircle"">")
+	
+	set listMethods = ..GetAllMethods(mockName)
+	set listMethodswithREST = ##class(%ListOfDataTypes).%New()
+	for i=1:1:listMethods.Count() {
+    	set method = listMethods.GetAt(i)
+    	set first = "true"
+    	set firstREST = "true"
+    	
+    	set key = $Order(^MockMat(mockName, method, ""))
+ 		while (key '= "") {
+		 	if (key '= "GET") &&  (key '= "POST") && (key '= "PUT") && (key '= "DELETE") {
+			 	if first="true" {
+				 	set first="false"
+		    		do file.WriteLine(..Tabs(4)_"<listitem>")
+    				do file.WriteLine(..Tabs(5)_"<para>"_method_"()</para>")
+    				do file.WriteLine(..Tabs(5)_"<table frame=""all"">")
+    				do file.WriteLine(..Tabs(6)_"<tgroup align=""left"" cols=""2"">")
+    				do file.WriteLine(..Tabs(7)_"<colspec colname=""c1""/>")
+    				do file.WriteLine(..Tabs(7)_"<colspec colname=""c2""/>")
+    				do file.WriteLine(..Tabs(7)_"<thead>")
+    				do file.WriteLine(..Tabs(8)_"<row>")
+    				do file.WriteLine(..Tabs(9)_"<entry>Parameters</entry>")
+    				do file.WriteLine(..Tabs(9)_"<entry>Response</entry>")
+    				do file.WriteLine(..Tabs(8)_"</row>")
+    				do file.WriteLine(..Tabs(7)_"</thead>")
+    				do file.WriteLine(..Tabs(7)_"<tbody>")	 		
+			 	}
+			 	
+			 	do file.WriteLine(..Tabs(8)_"<row>")
+			 	do file.WriteLine(..Tabs(9)_"<entry>"_key_"</entry>")
+			 	set response = ^MockMat(mockName, method, key)
+			 	do file.WriteLine(..Tabs(9)_"<entry>"_response_"</entry>")
+			 	do file.WriteLine(..Tabs(8)_"</row>")
+			 		
+		 	} else {
+			 	if firstREST="true" {
+				 	set firstRest="false"
+		 			do listMethodswithREST.Insert(method)
+			 	}
+		 	}
+		 	s key = $Order(^MockMat(mockName, method, key)) // next subscript
+ 		}
+    	
+    	if first="false" {
+    		do file.WriteLine(..Tabs(7)_"</tbody>")
+    		do file.WriteLine(..Tabs(6)_"</tgroup>")
+    		do file.WriteLine(..Tabs(5)_"</table>")
+    		do file.WriteLine(..Tabs(4)_"</listitem>")
+    	}
+ 	} 
+	
+	do file.WriteLine(..Tabs(3)_"</itemizedlist>")
+	do file.WriteLine(..Tabs(2)_"</section>")
+	
+	
+	// second REST mocked methods
+	set port = "9092"
+	set url = "http://localhost:"_port_"/api/mockfw/"_mockName_"/"
+	
+	do file.WriteLine(..Tabs(2)_"<section>")
+	do file.WriteLine(..Tabs(3)_"<title>REST mocked methods</title>")
+	do file.WriteLine(..Tabs(3)_"<itemizedlist mark=""opencircle"">")
+	
+	
+	for i=1:1:listMethodswithREST.Count() {
+    	set method = listMethodswithREST.GetAt(i)
+    	
+    	do file.WriteLine(..Tabs(4)_"<listitem>")
+    	do file.WriteLine(..Tabs(5)_"<para>"_url_method_"</para>")
+    	do file.WriteLine(..Tabs(5)_"<table frame=""all"">")
+    	do file.WriteLine(..Tabs(6)_"<tgroup align=""left"" cols=""3"">")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c1""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c2""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c3""/>")
+    	do file.WriteLine(..Tabs(7)_"<thead>")
+    	do file.WriteLine(..Tabs(8)_"<row>")
+    	do file.WriteLine(..Tabs(9)_"<entry>HTTP method</entry>")
+    	do file.WriteLine(..Tabs(9)_"<entry>Body</entry>")
+    	do file.WriteLine(..Tabs(9)_"<entry>Response</entry>")
+    	do file.WriteLine(..Tabs(8)_"</row>")
+    	do file.WriteLine(..Tabs(7)_"</thead>")
+    	do file.WriteLine(..Tabs(7)_"<tbody>")
+    	
+    	set restmethod = $Order(^MockMat(mockName, method, ""))
+ 		while (restmethod '= "") {
+	 		
+			set param = $Order(^MockMat(mockName, method, restmethod, ""))
+			while (param '= "") {
+				do file.WriteLine(..Tabs(8)_"<row>")
+				do file.WriteLine(..Tabs(9)_"<entry>"_restmethod_"</entry>")
+				if param '= "GET" {
+				do file.WriteLine(..Tabs(9)_"<entry>"_param_"</entry>")
+				} else {
+				do file.WriteLine(..Tabs(9)_"<entry></entry>")
+				}			
+				set response = ^MockMat(mockName, method, restmethod, param)
+				do file.WriteLine(..Tabs(9)_"<entry>"_response_"</entry>")
+				do file.WriteLine(..Tabs(8)_"</row>")
+			
+				s param = $Order(^MockMat(mockName, method, restmethod, param)) // next params
+			}
+			s restmethod = $Order(^MockMat(mockName, method, restmethod)) // next restmethod
+			 	
+ 		}
+    	do file.WriteLine(..Tabs(7)_"</tbody>")
+    	do file.WriteLine(..Tabs(6)_"</tgroup>")
+    	do file.WriteLine(..Tabs(5)_"</table>")
+    	do file.WriteLine(..Tabs(4)_"</listitem>")
+ 	} 
+	do file.WriteLine(..Tabs(3)_"</itemizedlist>")
+	do file.WriteLine(..Tabs(2)_"</section>")
+
+
+	do file.WriteLine($$$TAB_"</chapter>")
+	do file.WriteLine("</book>")
+	
+
+	return $$$OK
 }
 
 }

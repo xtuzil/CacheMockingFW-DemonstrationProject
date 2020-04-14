@@ -2,9 +2,9 @@ Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils)
 {
 
 /// Save method of Mock to the global if does not already exist
-ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "")
+ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", force = 0) As %Status
 {
-		
+	
 	if (restMethod="GET") {
 		set params = "GET"
 	}
@@ -23,28 +23,32 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 	}
 	
 	if (restMethod="") {
-		if ($DATA(^MockMat(mockName, methodName, params))) {
+		if 'force {
+			if ($DATA(^MockMat(mockName, methodName, params))) {
+					w !, "ERROR: The record with same parameters already exists."
+					quit '$$$OK
+			} 
+			set tSC = ..GetMockedResponse(mockName, methodName, params, .res)
+			if (tSC=1) {
 				w !, "ERROR: The record with same parameters already exists."
 				quit '$$$OK
-		} 
-		set tSC = ..GetMockedResponse(mockName, methodName, params, .res)
-		if (tSC=1) {
-			w !, "ERROR: The record with same parameters already exists."
-			quit '$$$OK
+			}
 		}
 		
 		set ^MockMat(mockName, methodName, params) = response
 		
 	} else {
 		
-		if ($DATA(^MockMat(mockName, methodName, restMethod, params))) {
+		if 'force {
+			if ($DATA(^MockMat(mockName, methodName, restMethod, params))) {
+					w !, "ERROR: The record with same parameters already exists."
+					quit '$$$OK
+			} 
+			set tSC = ..GetMockedResponseREST(mockName, methodName, restMethod, params, .res) 
+			if (tSC=1) {
 				w !, "ERROR: The record with same parameters already exists."
 				quit '$$$OK
-		} 
-		set tSC = ..GetMockedResponseREST(mockName, methodName, restMethod, params, .res) 
-		if (tSC=1) {
-			w !, "ERROR: The record with same parameters already exists."
-			quit '$$$OK
+			}
 		}
 		
 		set ^MockMat(mockName, methodName, restMethod, params) = response
@@ -55,7 +59,7 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 }
 
 /// Return right data when specific method is called
-ClassMethod MethodCalled(class As %String, methodName As %String, Args...)
+ClassMethod MethodCalled(class As %String, methodName As %String, Args...) As %String
 {
 	set response = {}
 	set args = ..TransformArgsToList(Args...)
@@ -75,7 +79,7 @@ ClassMethod MethodCalled(class As %String, methodName As %String, Args...)
 }
 
 /// Retrieve right data from global if the method with specific parameters is mocked
-ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params, Output response)
+ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params, Output response) As %Status
 {
 	set response=""
 	set key = $Order(^MockMat(mockName, methodName,""))
@@ -95,7 +99,7 @@ ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params
 }
 
 /// Retrieve right data from global if the method with specific parameters is mocked. REST version.
-ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response)
+ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response) As %Status
 {
 	set response=""
 	if method="GET" {
