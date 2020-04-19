@@ -32,11 +32,7 @@ ClassMethod CutExtraQuotes(string As %String) As %String
 
 /// Compare two strings (potentionally objects)
 ClassMethod Compare(savedObject, params) As %Integer
-{
-	//todo: Prvne overit, jestli je pocet atributu stejny
-	// potom Pres jeden iterator vzit vzdy atribut z jednoho, zeptat se, jestli ten kez existuje i ve druhzm a pak porovnat value obou.
-	// problem se slozitejsima dat. typama, jak to resit?
-	
+{	
 	if savedObject = params {
 		return 1
 	}

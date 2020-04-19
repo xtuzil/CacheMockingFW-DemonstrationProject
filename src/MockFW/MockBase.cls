@@ -66,9 +66,7 @@ ClassMethod MethodCalled(class As %String, methodName As %String, Args...) As %S
 	set response = {}
 	set args = ..TransformArgsToList(Args...)
 	
-	// pokud neni prazdnej
 	// beru jen prvni paramtr, mozna by chtelo vsechny (pocitam s tim, ze vzdy dostanu object)
-	set json = {}
 	set params = args.GetAt(1)
 	
 	if ($ISOBJECT(params)) {

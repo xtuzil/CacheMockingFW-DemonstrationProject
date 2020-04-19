@@ -36,7 +36,6 @@ ClassMethod CreateMock(className As %String) As %Status
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE(Class,""."",3) ")
 	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)")
 
-	
 	do classDef.Methods.Insert(methodDef)
 	
 	do classDef.%Save()
@@ -197,15 +196,18 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
 	
 	
 	do file.WriteLine($$$TAB_"<chapter>")
-	do file.WriteLine(..Tabs(2)_"<title>MockFW.Mocks."_mockName_"</title>")
+	do file.WriteLine(..Tabs(2)_"<title>ZK.Mocks."_mockName_"</title>")
 	
 	
 	// first local mocked methods
-	do file.WriteLine(..Tabs(2)_"<section>")
-	do file.WriteLine(..Tabs(3)_"<title>Local mocked methods</title>")
-	do file.WriteLine(..Tabs(3)_"<itemizedlist mark=""opencircle"">")
+	set local = "false"
 	
 	set listMethods = ..GetAllMethods(mockName)
+	set key = $Order(^MockMat(mockName,""))
+ 	while (key '= "") {
+		do listMethods.Insert(key)
+     	s key = $Order(^MockMat(mockName,key)) // next subscript
+ 	}
 	set listMethodswithREST = ##class(%ListOfDataTypes).%New()
 	for i=1:1:listMethods.Count() {
     	set method = listMethods.GetAt(i)
@@ -215,6 +217,12 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
     	set key = $Order(^MockMat(mockName, method, ""))
  		while (key '= "") {
 		 	if (key '= "GET") &&  (key '= "POST") && (key '= "PUT") && (key '= "DELETE") {
+			 	if local = "false" {
+				 	set local = "true"
+			 		do file.WriteLine(..Tabs(2)_"<section>")
+					do file.WriteLine(..Tabs(3)_"<title>Local mocked methods</title>")
+					do file.WriteLine(..Tabs(3)_"<itemizedlist mark=""opencircle"">")
+			 	}
 			 	if first="true" {
 				 	set first="false"
 		    		do file.WriteLine(..Tabs(4)_"<listitem>")
@@ -241,7 +249,9 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
 		 	} else {
 			 	if firstREST="true" {
 				 	set firstRest="false"
-		 			do listMethodswithREST.Insert(method)
+		 			if listMethodswithREST.Find(method) = "" {
+		 				do listMethodswithREST.Insert(method)
+					}
 			 	}
 		 	}
 		 	s key = $Order(^MockMat(mockName, method, key)) // next subscript
@@ -254,10 +264,10 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
     		do file.WriteLine(..Tabs(4)_"</listitem>")
     	}
  	} 
-	
-	do file.WriteLine(..Tabs(3)_"</itemizedlist>")
-	do file.WriteLine(..Tabs(2)_"</section>")
-	
+	if local = "true" {
+		do file.WriteLine(..Tabs(3)_"</itemizedlist>")
+		do file.WriteLine(..Tabs(2)_"</section>")
+	}
 	
 	// second REST mocked methods
 	set port = "9092"
@@ -274,15 +284,19 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
     	do file.WriteLine(..Tabs(4)_"<listitem>")
     	do file.WriteLine(..Tabs(5)_"<para>"_url_method_"</para>")
     	do file.WriteLine(..Tabs(5)_"<table frame=""all"">")
-    	do file.WriteLine(..Tabs(6)_"<tgroup align=""left"" cols=""3"">")
-    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c1""/>")
-    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c2""/>")
-    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c3""/>")
+    	do file.WriteLine(..Tabs(6)_"<tgroup align=""left"" cols=""5"">")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c1"" colwidth=""1*""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c2"" colwidth=""3*""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c3"" colwidth=""3*""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c4"" colwidth=""1*""/>")
+    	do file.WriteLine(..Tabs(7)_"<colspec colname=""c5"" colwidth=""1*""/>")
     	do file.WriteLine(..Tabs(7)_"<thead>")
     	do file.WriteLine(..Tabs(8)_"<row>")
     	do file.WriteLine(..Tabs(9)_"<entry>HTTP method</entry>")
     	do file.WriteLine(..Tabs(9)_"<entry>Body</entry>")
     	do file.WriteLine(..Tabs(9)_"<entry>Response</entry>")
+    	do file.WriteLine(..Tabs(9)_"<entry>Return code</entry>")
+    	do file.WriteLine(..Tabs(9)_"<entry>Delay(s)</entry>")
     	do file.WriteLine(..Tabs(8)_"</row>")
     	do file.WriteLine(..Tabs(7)_"</thead>")
     	do file.WriteLine(..Tabs(7)_"<tbody>")
@@ -301,6 +315,10 @@ ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:
 				}			
 				set response = ^MockMat(mockName, method, restmethod, param)
 				do file.WriteLine(..Tabs(9)_"<entry>"_response_"</entry>")
+				set code = ^MockMat(mockName, method, restmethod, param, "code")
+				do file.WriteLine(..Tabs(9)_"<entry>"_code_"</entry>")
+				set delay = ^MockMat(mockName, method, restmethod, param, "delay")
+				do file.WriteLine(..Tabs(9)_"<entry>"_delay_"</entry>")
 				do file.WriteLine(..Tabs(8)_"</row>")
 			
 				s param = $Order(^MockMat(mockName, method, restmethod, param)) // next params
