@@ -9,4 +9,7 @@ services:
     ports: 
       - "9091:51773"
       - "9092:52773"
-
+    volumes:
+      - ./Export:/opt/mockfw/export
+    
+    

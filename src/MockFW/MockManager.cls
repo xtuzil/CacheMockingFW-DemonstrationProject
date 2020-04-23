@@ -87,25 +87,32 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 /// Export Mock class and Mock data as a two files (.xml a .gof)
 /// dirPath = directory where you have folder with Iris docker + /durable/src
 /// mockName = e.g. MyMock
-ClassMethod ExportMock(mockName As %String, dirPath As %String) As %Status
+ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer = 0) As %Status
 {
 	set className = "MockFW.Mocks."_mockName
 	set exist=##class(%Dictionary.CompiledClass).%ExistsId(className)
 	if 'exist {
 		quit '$$$OK
 	}
+	
+	if inContainer {
+		set dirPath = "/opt/mockfw/export/"
+	} else {
+		set dirPath = dirPath_"\"
+	}
 
-	do ..ExportMockData(mockName, dirPath)
+	do ..ExportMockData(mockName, dirPath, inContainer)
 	do ..ExportMockClass(mockName, dirPath)
 
 	quit $$$OK
 }
 
 /// Auxiliary method, exports Mocks data
-ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status
+ClassMethod ExportMockData(mockName As %String, dirPath As %String, inContainer = 0) As %Status
 {
+	  
 	set global = "MockMat("_mockName
-	set filePath = dirPath_"\dataGlobal.gof"
+	set filePath = dirPath_"dataGlobal.gof"
 	quit ##class(%Library.Global).Export(,global,filePath)
 }
 
@@ -113,7 +120,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status
 ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status
 {
 	set fullClassName = "MockFW.Mocks."_mockName_".cls"
-	set filePath = dirPath_"\mockClass.xml"
+	set filePath = dirPath_"mockClass.xml"
 	quit $system.OBJ.Export(fullClassName, filePath)
 }
 
@@ -178,8 +185,12 @@ ClassMethod CleanAll()
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
 }
 
-ClassMethod GenerateDocumentation(mockName As %String, filePath As %String = "C:\Users\tuzilma\Desktop\file.xml") As %Status
+ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String = "C:\Users\tuzilma\Desktop\", inContainer = 0) As %Status
 {
+	if inContainer {
+		set filePath = "/opt/mockfw/export/"
+	}
+	set filePath = filePath_mockName_"Doc.xml"
 	set file=##class(%File).%New(filePath)
 	do file.Open("WSN")
 	do file.WriteLine("<?xml version=""1.0"" encoding=""UTF-8""?>")

@@ -46,7 +46,7 @@ ClassMethod WriteErrorResponse(mockName, methodName, SC As %Status, encode As %B
 	set %response.Status = 404
 	set stream=##class(%Stream.GlobalCharacter).%New()
 	set response = {}
-	set error = "Metoda "_methodName_" pro mock "_mockName_" s parametry nenalezena."
+	set error = "Metoda s URL "_methodName_" pro mock "_mockName_" s parametry nenalezena."
 	do response.%Set("Error",error)
 	
 	do response.%ToJSON(stream)

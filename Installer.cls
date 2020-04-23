@@ -7,7 +7,7 @@ XData setup
   <Default Name="SourceDir" Value="#{$system.Process.CurrentDirectory()}src"/>
   <Default Name="Namespace" Value="MOCKFW"/>
   <Default Name="app" Value="mockfw"/>
-  <Default Name="cspapp" Value="/api/${app}/"/>
+  <Default Name="cspapp" Value="/api/mocks/"/>
   <Default Name="dispatchclass" Value="MockFW.REST"/>
   <Default Name="username" Value="mockuser"/>
   <Default Name="password" Value="12345"/>
@@ -47,9 +47,9 @@ XData setup
   </Namespace>
 
 
-  <Namespace Name="${CURRENTNS}">
+  <!--<Namespace Name="${CURRENTNS}">
   <Invoke Class="${CURRENTCLASS}" Method="ImportMockData" CheckStatus="true"/>
-  </Namespace>
+  </Namespace> -->
 
 
 </Manifest>
@@ -57,11 +57,9 @@ XData setup
 
 ClassMethod setup(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %Installer.Installer, pLogger As %Installer.AbstractLogger) As %Status [ CodeMode = objectgenerator, Internal ]
 {
-  w !, "in setup()"
   do %code.WriteLine($char(9)_"set pVars(""CURRENTCLASS"")="""_%classname_"""")
   do %code.WriteLine($char(9)_"set pVars(""CURRENTNS"")="""_$namespace_"""")
   #; Let our XGL document generate code for this method. 
-  w ! , "before generate"
   Quit ##class(%Installer.Manifest).%Generate(%compiledclass, %code, "setup")
 }
 
@@ -90,12 +88,30 @@ ClassMethod SetUser(username As %String = "", password As %String = "") As %Stat
     quit $$$OK
 }
 
-ClassMethod ImportMockData()
+/*ClassMethod ImportMockData()
 {
+  set statement = ##class(%SQL.Statement).%New()
+  $$$QuitOnError(statement.%PrepareClassQuery("%File", "FileSet"))
+  
+  set dir = ##class(%File).NormalizeDirectory("./Data")
+  set row = statement.%Execute(dir)
+  set sc = $$$OK   
+  
+  while row.%Next(.sc) {
+    if $$$ISERR(sc) quit
+    set type = row.%Get("Type") 
+    set fullPath = row.%Get("Name") 
+    set suffix = $PIECE(fullPath, ".", 2)
+    if suffix = "gof" {
+      do ##class(%Library.Global).Import(,"*",fullPath)
+    }
 
-  do ##class(%Library.Global).Import(,"*","./Data/dataGlobal.gof")
-  do $system.OBJ.Load("./Data/*", "ck")
+  }
+
+  //do ##class(%Library.Global).Import(,"*","./Data/dataGlobal.gof")
+  //w $SYSTEM.Process.CurrentDirectory()
+  //do $system.OBJ.Load("./Data/mockClass.xml", "ck")
   quit $$$OK
-}
+}*/
 
 }
