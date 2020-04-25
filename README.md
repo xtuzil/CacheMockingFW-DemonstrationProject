@@ -1,6 +1,30 @@
 ## MockFW users template
 This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template from: https://github.com/intersystems-community/objectscript-docker-template
 
+
+## Instructions for FW user in Caché
+The framework needs to be imported to the Caché/IRIS as a package.
+The main class from which can be controlled the mock is MockFW.MockManager. It allows:
+
+**CreateMock()** -- create mock (generate class definition) 
+* *nameOfTheMock* As %String
+```
+MOCKFW>do ##class(MockFW.MockManager).CreateMock("MyMock") 
+```
+    
+**SaveMethod()** -- save mocked method to the mock 
+* *nameOfTheMock* As %String
+* *methodName* As %String
+* *params* As %String or object
+* *response* As %String or object 
+* *restMethod* As %String ("GET" | "POST" | "PUT" | "DELETE") = ""
+* *returnCode* As %Integer = 200
+* *delay* As %Integer in seconds = 0
+* *force* As %Integer (1 | 0) = 0  -> 1 to force overwrite the same records 
+```
+MOCKFW>do ##class((MockFW.MockManager)).SaveMethod("MyMock", "Method", "{"name":"John"}", "return", "POST", 204, 5, 1)
+```
+
 ## Prerequisites
 This needs to have docker installed. (Docker-compose)
 
