@@ -20,9 +20,11 @@ As a mock user you have two options:
     ```
 Let the Docker start the app. App listen on port 9092. In complex version of the mock, it is possible to call method from terminal. Refresh app in VS Code or:\
     ```
-    $ docker exec -it mock iris session IRIS
+    $ docker exec -it onlymock iris session IRIS
     $ USER> zn "MOCKFW"
     ```
+
+    h to exit IRIS
 \To log in (e.g. on Postman) use username: 'mockuser' and password:'12345'
 \If the version of distribution support managment portal, use: http://localhost:9092/csp/sys/UtilHome.csp
 
@@ -98,3 +100,9 @@ Then, there are to option to distribute the mock:
     ```
     e.g. $ zip -r MockFW.zip MockFW
     ```
+
+
+
+to be in container terminal
+docker exec -it onlymock /bin/bash
+  
