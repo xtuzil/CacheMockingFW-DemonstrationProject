@@ -1,7 +1,98 @@
-## MockFW users template
-This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template from: https://github.com/intersystems-community/objectscript-docker-template
+# Caché mocking framework 
+**Caché mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché via terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server side applications or in unit tests.
 
+## Instructions for FW user in Caché
+The framework needs to be imported to the Caché/IRIS as a package.
+The main class from which can be controlled the mock is **MockFW.MockManager**.
 
+#### MockFW.MockManager
+It allows:
+**CreateMock()** -- create mock (generate class definition)
+* *nameOfTheMock* As %String
+```c++
+MOCKFW>do ##class(MockFW.MockManager).CreateMock("MyMock") 
+```
+
+After creating mock, it is generated the class of the mock in 'MockFW.Mocks' repositary. Now you can add some mocked methods to mock and also get the response which you set up before.
+    
+**SaveMethod()** -- save mocked method to the mock 
+* *nameOfTheMock* As %String
+* *methodName* As %String
+* *params* As %String or object
+* *response* As %String or object 
+* *restMethod* As %String ("GET" | "POST" | "PUT" | "DELETE") = ""
+* *returnCode* As %Integer = 200
+* *delay* As %Integer in seconds = 0
+* *force* As %Integer (1 | 0) = 0  -> 1 to force overwrite the same records 
+```c++
+MOCKFW>do ##class((MockFW.MockManager)).SaveMethod("MyMock", "Method", "{""name"":""John"""}", "return", "POST", 204, 5, 1)
+```
+Saving the method to the mock can be done also by direcly calling the class of the mock, see bellow.
+
+**MockMethodsFromCSV()** -- save multiple mocks and their mocked methods from .csv file 
+* columns in CSV are the same as parameters for SaveMethod()
+* *filePath* As %String -> relative or absolute path to the file 
+```c++
+MOCKFW>do ##class(MockFW.MockManager).MockMethodsFromCSV("C:\Users\user\Desktop\mockData.csv")
+```
+
+**GenerateDocumentation()** -- generate documentation for certain mock in XML format
+* *nameOfTheMock* As %String
+* *dirPath* As %String -> directory, where the documentation will be generated
+* *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+```c++
+MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\, 1)
+```
+
+**ExportMock()** -- export mock for Docker usage 
+* *nameOfTheMock* As %String
+* *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
+* *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+```c++
+MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "C:\Users\user\Desktop")
+```
+This needs to be done before distribution the mock. See **Instructions for FW user to distribute mock via Docker**
+
+**GetAllMocks()** -- return all mocks
+```c++
+MOCKFW>do ##class(MockFW.MockManager).GetAllMocks()
+```
+
+**GetAllMethods()** -- return all methods of certain mock
+* *nameOfTheMock* As %String
+```c++
+MOCKFW>do ##class(MockFW.MockManager).GetAllMethods("MyMock")
+```
+
+**DeleteMethod()** -- delete specific method from certain mock
+* *nameOfTheMock* As %String
+* *methodName* As %String
+```c++
+MOCKFW>do ##class(MockFW.MockManager).DeleteMethod("MyMock", "Method")
+```
+
+**DeleteMethod()** -- delete specific method from certain mock with selected parameters
+* *nameOfTheMock* As %String
+* *methodName* As %String
+* *params* As %String or object
+* *restMethod* As %String ("GET" | "POST" | "PUT" | "DELETE") = ""
+```c++
+MOCKFW>do ##class(MockFW.MockManager).DeleteMethodWithParameter("MyMock", "Method")
+```
+
+**DeleteMock()** -- delete certain mock (data global and class definition)
+* *nameOfTheMock* As %String
+```c++
+MOCKFW>do ##class(MockFW.MockManager).DeleteMock("MyMock")
+```
+
+**CleanAll()** -- delete all stored framework data
+```c++
+MOCKFW>do ##class(MockFW.MockManager).CleanAll()
+```
+  
+    
+     
 #### MockFW.Mocks.*NameOfTheMock*
 The generated class definition can be called in order to get predefined response. Also, it can be saved the mock method directly with this class.
 
@@ -23,110 +114,120 @@ MOCKFW>do ##class(MockFW.Mocks.MyMock).SaveMethod("Method", "", "return", "GET",
 MOCKFW>do ##class(MockFW.Mocks.MyMock).Method("{""name"":""John"""}")
 ```
 
+#### Instruction to calll the mock via request
+The mock can be called via HTTP request through company web server. To use this, it is necessary to create web applications in Managament Portal:
+```
+ System > Security Management > Web Applications > Create New Web Application
+```
+Fill up :
+* Name: /api/mocks
+* Description: Web application for mocking FW
+* Namespace: Namespace, where you import MOCKFW package
+* Allowed Authentication Methods: Password
+* Dispatch Class: MockFW.REST
 
-
-## Prerequisites
-This needs to have docker installed. (Docker-compose)
+Save the form and your web app is ready to use!
+```
+http://localhost:CachéPort/api/mocks/MyMock/MethodUrl
+```
 
 ## Instructions for docker mock user 
-As a mock user you have two options:
-1) Download docker image from DockerHub
-    - you just need to run the Docker run command with concrete image:
-    ```
-    e.g. $ docker run --name mock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
-    ```
-2) Build container with docker-compose from folder which you obtained    
-    - open the terminal in the directory of folder with mock       
-    ```
-    $ cd /dirPath/MockFW
+As a mock user in Docker you have two options how you can obtain the mock:
+1. Obtain the mock via compressed folder
+    Setup:
+    * unwrap the project folder 
+    * open the project directory in terminal 
+    * build docker image and run the container
+    ```sh
     $ docker-compose build
     $ docker-compose up -d
     ```
-Let the Docker start the app. App listen on port 9092. In complex version of the mock, it is possible to call method from terminal. Refresh app in VS Code or:\
+    Let the Docker start the app. By default, the container runs on port 9092 (can be changed in docker-compose.yml):
+    * use credential to log in -> username: mockuser, password:12345
+    * call the mock 
+    ```sh
+    http://localhost:9092/api/mocks/MyMock/MethodUrl
     ```
+    * launch Management Portal
+    ```sh
+    http://localhost:9092/csp/sys/UtilHome.csp
+    ```
+    The mock can be called from a terminal. To launch the IRIS terminal:
+    ```sh
     $ docker exec -it onlymock iris session IRIS
-    $ USER> zn "MOCKFW"
+    $ USER>zn "MOCKFW"
+    ...
+    MOCKFW>h  #to exit from terminal
     ```
+    If you wish to add some changes to the mock, you can, just keep in mind that you have to export the edited mock before the container stop to relaunch the container with changes. Look for the ExportMock() function and copy exported file from folder Export to folder src/ImportData: 
+    * **ExportMock()** -- export mock for Docker usage 
+        * *nameOfTheMock* As %String
+        * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
+        * *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+        ```c++
+        MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "", 1)
+        ```
+    
+    
+    
+2. Download docker image from DockerHub
+    - you just need to run the Docker command with concrete image, which you received:
+    ```sh
+    $ docker run --name onlymock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
+    ```
+    The app listen on port 9092 (or whatever is in command above), call the mock for example via Postman app.
+    * use credential to log in -> username: mockuser, password:12345
+    * call the mock 
+    ```sh
+    http://localhost:9092/api/mocks/MyMock/MethodUrl
+    ```
+    But beware, this approach does not allow to call the mock from IRIS terminal and so the change in the mock is not possible. Also, this requires almost double downloaded amount of the data
+    
+Look at the dockbook documentation to see all mocked methods in the mock!
 
-    h to exit IRIS
-\To log in (e.g. on Postman) use username: 'mockuser' and password:'12345'
-\If the version of distribution support managment portal, use: http://localhost:9092/csp/sys/UtilHome.csp
 
-## Instructions for FW user in Caché
-The main class which take care of the mocks is MockManager. It allows:
-- create mock - it generate class definition
-    ```c
-    MOCKFW>do ##class(MockFW.MockManager).CreateMock(NameOfTheMock) 
-    ```
-- export mock for Docker usage 
-    ```c++
-    MOCKFW>do ##class(MockFW.MockManager).ExportMock(NameOfTheMock)
-    ```
-- create mocks and their mocked methods from .csv file (csv file in format: 'Name of the Mock;Method;Input obj;Response;Rest method' )
-    ```zs
-    MOCKFW>do ##class(MockFW.MockManager).MockMethodsFromCSV(FilePath)
-    ```
-- handling mock
-    ```
-    MOCKFW>do ##class(MockFW.MockManager).GetAllMocks(), ...GetAllMethods(NameOfTheMock), ...ExportMockToCSV(NameOfTheMock), ...DeleteMock(NameOfTheMock), ...DeleteMethod(NameOfTheMock, ...NameOfTheMethod), ...DeleteMethodWithParametr(NameOfTheMock, NameOfTheMethod, Parameters), ...CleanAll())
-    ```
 
-After creating mock, it is generated the class of the mock in 'Mocks' repositary. Now you can add some mocked methods to mock and also get the response which you set up before.
-- SaveMethod(NameOfTheMethod, params, returnValue, *restMethod)
-    - params and return Value can be string or object
-    - restMehod is optionally, you can set mocked method for acces via request
-    - if you put "DEFAULT" as a params then whenever you call this method with unknow params, it responses you this returnValue
-    ```
-    e.g. MOCKFW>do ##class(MockFW.Mocks.Test).SaveMethod("test", "{"Halo":"Ano"}", "return")
-    ```
-- To get responses from mocked methods of mock, just call name method on the mock with params.
-    ```
-    e.g. MOCKFW>write ##class(MockFW.Mocks.Test).test("{"Halo":"Ano"}")
-    ```
-
-The class REST is responsible for REST inteface of the mocks
 
 
 ## Instructions for FW user to distribute mock via Docker
-To distribute mock via Docker, first it is neccessary to prepare directory from the git. 
-1) Simple version with only quering the mock. Clone:
-    ```
-    $ git clone/pull https://github.com/xtuzil/MockFW.git
-    ```
-2) Complex version with support to user can modify mock and other options. Clone:
-    ```
-    $ git clone/pull "some other url"
-    ```
-
-Second, export mock data:
-- in Caché:
-    ```
-    MOCKFW>do ##class(MockFW.MockManager).ExportMock(mockName, dirPath)
-    ```
-    - dirPath has to be directory in folder MockFW/src/Data from git. Or copy exported files dataGlobal.gof and export.gof to this folder after exporting somewhere else.
+1. To distribute mock via Docker, first it is neccessary to prepare template directory of the project from the git. 
+```sh
+$ git clone https://github.com/xtuzil/MockFW.git  # or pull
+```
+2. Export mock data from Caché:
+    * *nameOfTheMock* As %String
+    * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
+    * *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+```c++
+MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "C:\Users\user\Desktop")
+```
+3. Copy exported file *dataGlobal.gof* and optionally *mockClass.xml* (necessary only for calling the mock from IRIS terminal) to the project folder **src/ImportData**
 
 Then, there are to option to distribute the mock:
-1) Build the container and push it to Docker hub. The user will launch the mock with one command.
-    - This needs to have account at https://hub.docker.com and to create repositary there.
-    - Build the image
+* Send straightaway the directory to mock user
+    4. Send the compressed directory of the mock project to the user. Then the user has to build image from project folder.
+        ```sh
+        e.g. $ zip -r MyMock.zip MockFW
         ```
+    * this approach **allows** user to call the mock from IRIS terminal an also to edit the distributed mock
+
+* Build the container and push it to Docker hub. The user will launch the mock with one command.
+    - This needs to have account at https://hub.docker.com and to create repositary there.
+    4. Build the image
+        ```sh
         $ docker-compose build
         ```
-    - Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
+    5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
+        ```sh
+        $ docker tag mock1 myrepozitary/imagename:version
         ```
-        $ docker tag mock1 registry-host:mock1
+    6. Now, push the image to the registry using the image ID.
+        ```sh
+        $ docker push myrepozitary/imagename:version
         ```
-    - Now, push the image to the registry using the image ID.
-        ```
-        $ docker push registry-host:mock1
-        ```
-2) Send the directory to mock user. Then the user has to build image from this folder.
-    ```
-    e.g. $ zip -r MockFW.zip MockFW
-    ```
+    7. Send the name of tag to the user. He can run the container only by one docker command
+    * this approach **does not allow** user to call the mock from IRIS terminal an also to edit the distributed mock
+    
+    
+@Matěj Tužil 2020
 
-
-
-to be in container terminal
-docker exec -it onlymock /bin/bash
-  
