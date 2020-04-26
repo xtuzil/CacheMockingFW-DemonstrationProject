@@ -203,13 +203,15 @@ MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "C:\Users\user\Deskto
 ```
 3. Copy exported file *dataGlobal.gof* and optionally *mockClass.xml* (necessary only for calling the mock from IRIS terminal) to the project folder **src/ImportData**
 
-Then, there are two option to distribute the mock:
+Then, there are two option to distribute the mock:  
+
 a) Send straightaway the directory to mock user
     4. Send the compressed directory of the mock project to the user. Then the user has to build image from project folder.
         ```sh
         e.g. $ zip -r MyMock.zip MockFW
         ```
-    * this approach **allows** user to call the mock from IRIS terminal an also to edit the distributed mock
+    * this approach **allows** user to call the mock from IRIS terminal an also to edit the distributed mock  
+    
 
 b) Build the container and push it to Docker hub. The user will launch the mock with one command.
     * This needs to have account at https://hub.docker.com and to create repositary there.
