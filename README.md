@@ -33,7 +33,7 @@ Let the Docker start the app. App listen on port 9092. In complex version of the
 ## Instructions for FW user in Caché
 The main class which take care of the mocks is MockManager. It allows:
 - create mock - it generate class definition
-    ```
+    ```sh
     MOCKFW>do ##class(MockFW.MockManager).CreateMock(NameOfTheMock) 
     ```
 - export mock for Docker usage 
