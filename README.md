@@ -213,12 +213,14 @@ a) Send straightaway the directory to mock user
     * this approach **allows** user to call the mock from IRIS terminal an also to edit the distributed mock  
     
 
-b) Build the container and push it to Docker hub. The user will launch the mock with one command.
-    * This needs to have account at https://hub.docker.com and to create repositary there.
+b) Build the container and push it to Docker hub. The user will launch the mock with one command.  
+    * This needs to have account at https://hub.docker.com and to create repositary there.  
+  
     4. Build the image
         ```sh
         $ docker-compose build
-        ```
+        ```. 
+        
     5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
         ```sh
         $ docker tag mock1 myrepozitary/imagename:version
