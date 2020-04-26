@@ -80,34 +80,4 @@ ClassMethod GetQuery() As %String
 	return query
 }
 
-/// This method is to be called as an endpoint itself!
-/// <example language="swagger">
-///       description: Simple endpoint to print this Swagger definition in YAML
-///       summary: Retrieves Swagger definition in YAML
-///       produces:
-///         - application/x-yaml
-///       operationId: swaggerDefinition
-///       responses:
-///         200:
-///           description: successful response
-/// </example>
-ClassMethod GetSwagger() As %Status [ Internal ]
-{
-  set tSC = $$$OK
-  try {
-    #dim %request as %CSP.Request
-    set %response.ContentType = "text/yaml" //"application/x-yaml"
-    
-    set tSC = ..GenerateSwaggerYAML(.tYAML, $classname())
-    quit:$$$ISERR(tSC)
-    
-    write tYAML
-    
-  } catch (ex) {
-    set tSC = ex.AsStatus()
-  }
-  do:$$$ISERR(tSC) $system.OBJ.DisplayError(tSC)
-  quit tSC
-}
-
 }

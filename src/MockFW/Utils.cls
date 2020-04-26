@@ -1,6 +1,7 @@
 Class MockFW.Utils Extends %RegisteredObject
 {
 
+/// Auxiliary method, which add multiple $$$TAB to line of generated code
 ClassMethod Tabs(count)
 {
 	set res = ""

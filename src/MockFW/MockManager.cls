@@ -43,6 +43,13 @@ ClassMethod CreateMock(className As %String) As %Status
    	quit ##class(%SYSTEM.OBJ).Compile(fullClassName)
 }
 
+/// Save method of the certain mock to the global if the method with same parameters does not already exist
+/// To overwrite existing record adjust parametr force to 1
+ClassMethod SaveMethod(mockName As %String, methodName As %String, params, response, restMethod As %String = "", code As %Integer = 200, delay = 0, force = 0) As %Status
+{
+	quit ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)
+}
+
 /// Import mock and mocks data from .csv file
 /// Import proccess from the second line with format 'Name of the Mock; Method; parameters; Response; Rest method'
 ClassMethod MockMethodsFromCSV(filePath As %String)
@@ -78,16 +85,12 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
 	quit $$$OK
 }
 
-ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", code = 200, delay = 0, force = 0) As %Status
-{
-	quit ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)
-}
 
 /// Is used when closing REST API into Docker
 /// Export Mock class and Mock data as a two files (.xml a .gof)
 /// dirPath = directory where you have folder with Iris docker + /durable/src
 /// mockName = e.g. MyMock
-ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer = 0) As %Status
+ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer As %Integer = 0) As %Status
 {
 	set className = "MockFW.Mocks."_mockName
 	set exist=##class(%Dictionary.CompiledClass).%ExistsId(className)
@@ -101,14 +104,14 @@ ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer = 0)
 		set dirPath = dirPath_"\"
 	}
 
-	do ..ExportMockData(mockName, dirPath, inContainer)
+	do ..ExportMockData(mockName, dirPath)
 	do ..ExportMockClass(mockName, dirPath)
 
 	quit $$$OK
 }
 
 /// Auxiliary method, exports Mocks data
-ClassMethod ExportMockData(mockName As %String, dirPath As %String, inContainer = 0) As %Status
+ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status [ Private ]
 {
 	  
 	set global = "MockMat("_mockName
@@ -117,7 +120,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String, inContainer 
 }
 
 /// Auxiliary method, exports Mock class
-ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status
+ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status [ Private ]
 {
 	set fullClassName = "MockFW.Mocks."_mockName_".cls"
 	set filePath = dirPath_"mockClass.xml"
@@ -185,7 +188,9 @@ ClassMethod CleanAll()
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
 }
 
-ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String = "C:\Users\tuzilma\Desktop\", inContainer = 0) As %Status
+/// This method generates documentation for the certain mock
+/// Format of the documentation is XML for simple transformation to DocBook via XMLmind or other tools
+ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String, inContainer As %Integer = 0) As %Status
 {
 	if inContainer {
 		set filePath = "/opt/mockfw/export/"

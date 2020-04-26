@@ -47,11 +47,6 @@ XData setup
   </Namespace>
 
 
-  <!--<Namespace Name="${CURRENTNS}">
-  <Invoke Class="${CURRENTCLASS}" Method="ImportMockData" CheckStatus="true"/>
-  </Namespace> -->
-
-
 </Manifest>
 }
 
@@ -87,31 +82,5 @@ ClassMethod SetUser(username As %String = "", password As %String = "") As %Stat
     do ##class(Security.Users).Create(username,.props)
     quit $$$OK
 }
-
-/*ClassMethod ImportMockData()
-{
-  set statement = ##class(%SQL.Statement).%New()
-  $$$QuitOnError(statement.%PrepareClassQuery("%File", "FileSet"))
-  
-  set dir = ##class(%File).NormalizeDirectory("./Data")
-  set row = statement.%Execute(dir)
-  set sc = $$$OK   
-  
-  while row.%Next(.sc) {
-    if $$$ISERR(sc) quit
-    set type = row.%Get("Type") 
-    set fullPath = row.%Get("Name") 
-    set suffix = $PIECE(fullPath, ".", 2)
-    if suffix = "gof" {
-      do ##class(%Library.Global).Import(,"*",fullPath)
-    }
-
-  }
-
-  //do ##class(%Library.Global).Import(,"*","./Data/dataGlobal.gof")
-  //w $SYSTEM.Process.CurrentDirectory()
-  //do $system.OBJ.Load("./Data/mockClass.xml", "ck")
-  quit $$$OK
-}*/
 
 }

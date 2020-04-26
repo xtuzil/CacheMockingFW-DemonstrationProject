@@ -4,7 +4,7 @@ Class MockFW.REST Extends (MockFW.REST.Base, MockFW.REST.Utils, %CSP.REST)
 XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 {
 <Routes>
-<Route Url="/:name" Method="GET" Call="HelloWorld" Cors="false" />
+<Route Url="/ping" Method="GET" Call="Test()" Cors="false" />
 <Route Url="/:mockName/(.+)" Method="POST" Call="Dispatch" Cors="false" />
 <Route Url="/:mockName/(.+)" Method="GET" Call="Dispatch" Cors="false" />
 <Route Url="/:mockName/(.+)" Method="PUT" Call="Dispatch" Cors="false" />
@@ -12,9 +12,9 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 </Routes>
 }
 
-ClassMethod HelloWorld(name)
+ClassMethod Test()
 {
-	w "Hello World "_name
+	w pong
 	q $$$OK
 }
 
