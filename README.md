@@ -37,11 +37,11 @@ The main class which take care of the mocks is MockManager. It allows:
     MOCKFW>do ##class(MockFW.MockManager).CreateMock(NameOfTheMock) 
     ```
 - export mock for Docker usage 
-    ```
+    ```shell
     MOCKFW>do ##class(MockFW.MockManager).ExportMock(NameOfTheMock)
     ```
 - create mocks and their mocked methods from .csv file (csv file in format: 'Name of the Mock;Method;Input obj;Response;Rest method' )
-    ```
+    ```zs
     MOCKFW>do ##class(MockFW.MockManager).MockMethodsFromCSV(FilePath)
     ```
 - handling mock
