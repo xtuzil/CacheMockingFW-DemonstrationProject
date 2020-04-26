@@ -2,6 +2,28 @@
 This is a template for MockFW users to create mock in docker. It is build on InterSystems ObjectScript template from: https://github.com/intersystems-community/objectscript-docker-template
 
 
+#### MockFW.Mocks.*NameOfTheMock*
+The generated class definition can be called in order to get predefined response. Also, it can be saved the mock method directly with this class.
+
+**SaveMethod()** -- save mocked method to the class mock 
+* *methodName* As %String
+* *params* As %String or object
+* *response* As %String or object 
+* *restMethod* As %String ("GET" | "POST" | "PUT" | "DELETE") = ""
+* *returnCode* As %Integer = 200
+* *delay* As %Integer in seconds = 0
+* *force* As %Integer (1 | 0) = 0  -> 1 to force overwrite the same records 
+```c++
+MOCKFW>do ##class(MockFW.Mocks.MyMock).SaveMethod("Method", "", "return", "GET", 404)
+```
+
+**DispatchMethod()** - call certain method on specific mock class
+* *params* As %String or object
+```c++
+MOCKFW>do ##class(MockFW.Mocks.MyMock).Method("{""name"":""John"""}")
+```
+
+
 
 ## Prerequisites
 This needs to have docker installed. (Docker-compose)
