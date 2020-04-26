@@ -220,7 +220,7 @@ b) Build the container and push it to Docker hub. The user will launch the mock 
    4. Build the image
          ```sh
         $ docker-compose build
-        ```. 
+        ```
         
    5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).  
         ```sh
