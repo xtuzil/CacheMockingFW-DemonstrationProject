@@ -213,19 +213,19 @@ Then, there are to option to distribute the mock:
 
 * Build the container and push it to Docker hub. The user will launch the mock with one command.
     - This needs to have account at https://hub.docker.com and to create repositary there.
-    4. Build the image
+4. Build the image
         ```sh
         $ docker-compose build
         ```
-    5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
+5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).
         ```sh
         $ docker tag mock1 myrepozitary/imagename:version
         ```
-    6. Now, push the image to the registry using the image ID.
+6. Now, push the image to the registry using the image ID.
         ```sh
         $ docker push myrepozitary/imagename:version
         ```
-    7. Send the name of tag to the user. He can run the container only by one docker command
+7. Send the name of tag to the user. He can run the container only by one docker command
     * this approach **does not allow** user to call the mock from IRIS terminal an also to edit the distributed mock
     
     
