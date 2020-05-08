@@ -35,7 +35,7 @@ As a mock user in Docker you have two options how you can obtain the mock:
     * **ExportMock()** -- export mock for Docker usage 
         * *nameOfTheMock* As %String
         * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
-        * *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+        * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
         ```c++
         MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "", 1)
         ```
@@ -96,7 +96,7 @@ MOCKFW>do ##class(MockFW.MockManager).SaveMethodsFromCSV("C:\Users\user\Desktop\
 **GenerateDocumentation()** -- generate documentation for certain mock in XML format
 * *nameOfTheMock* As %String
 * *dirPath* As %String -> directory, where the documentation will be generated
-* *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+* *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
 ```c++
 MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\", 1)
 ```
@@ -104,7 +104,7 @@ MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\
 **ExportMock()** -- export mock for Docker usage 
 * *nameOfTheMock* As %String
 * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
-* *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+* *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
 ```c++
 MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "C:\Users\user\Desktop")
 ```
@@ -197,7 +197,7 @@ $ git clone https://github.com/xtuzil/MockFW.git  # or pull
 2. Export mock data from Caché:
     * *nameOfTheMock* As %String
     * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
-    * *inContainer* As %Integer (1 | 0) = 0 -> dirPath is ignored and the file is generated to the Export folder in Docker project folder
+    * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
 ```c++
 MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "C:\Users\user\Desktop")
 ```
