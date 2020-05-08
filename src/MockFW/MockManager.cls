@@ -90,10 +90,10 @@ ClassMethod SaveMethodsFromCSV(filePath As %String)
      	}
      
      	if mockName'= "Name of the Mock" { // We do not want to take first line
-		 	do $I(count)
+		 	set count = count + 1
      		set sc = ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)                  
 			if sc=$$$OK {
-				do $I(saved)
+				set saved = saved + 1
 			}
 		}
    	}
