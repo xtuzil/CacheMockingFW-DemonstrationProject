@@ -86,11 +86,11 @@ MOCKFW>do ##class((MockFW.MockManager)).SaveMethod("MyMock", "Method", "{""name"
 ```
 Saving the method to the mock can be done also by direcly calling the class of the mock, see bellow.
 
-**MockMethodsFromCSV()** -- save multiple mocks and their mocked methods from .csv file 
+**SaveMethodsFromCSV()** -- save multiple mocks and their mocked methods from .csv file 
 * columns in CSV are the same as parameters for SaveMethod()
 * *filePath* As %String -> relative or absolute path to the file 
 ```c++
-MOCKFW>do ##class(MockFW.MockManager).MockMethodsFromCSV("C:\Users\user\Desktop\mockData.csv")
+MOCKFW>do ##class(MockFW.MockManager).SaveMethodsFromCSV("C:\Users\user\Desktop\mockData.csv")
 ```
 
 **GenerateDocumentation()** -- generate documentation for certain mock in XML format

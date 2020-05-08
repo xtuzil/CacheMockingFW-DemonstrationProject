@@ -1,0 +1,5 @@
+﻿Name of the Mock;Method;Input obj;Response;*Rest method;*Return Code;*Delay;*Force if exist
+Test;employee/1;;"{""name"":""John""}";GET;200;5;
+Test;employee/1;"{""name"":""John"", ""age"":""22""}";"{""Response"":""Employee saved""}";POST;200;0;1
+Test;employee/1;"{""name"":""John""}";"{""Response"":""Age not specified""}";POST;400;0;1
+Test;employee/accounting;"{""month"":""may"", ""amount"":""10000""}";"{""Response"":""record saved""}";POST;200;0;1

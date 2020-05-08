@@ -11,7 +11,7 @@
 <FormalSpec>Class:%String,methodName:%String,Args...</FormalSpec>
 <Implementation><![CDATA[
   set mockName = $PIECE(Class,".",3) 
-  quit ##class(ZK.MockBase).MethodCalled(mockName, methodName, Args...)
+  quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)
 ]]></Implementation>
 </Method>
 

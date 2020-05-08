@@ -7,7 +7,7 @@ ClassMethod CreateMock(className As %String) As %Status
 {
 	set fullClassName = "MockFW.Mocks."_className
 	
-	If (##class(%Dictionary.ClassDefinition).%Exists(fullClassName)) {
+	If (##class(%Dictionary.CompiledClass).%ExistsId(fullClassName)) {
 		w "Mock with this name already exists!"
 		quit '$$$OK
 	}
@@ -38,6 +38,15 @@ ClassMethod CreateMock(className As %String) As %Status
 
 	do classDef.Methods.Insert(methodDef)
 	
+	
+	set methodDef = ##class(%Dictionary.MethodDefinition).%New()
+	set methodDef.Name = "%DispatchMethod"	
+	set methodDef.FormalSpec="methodName:%String,Args..."
+	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE($CLASSNAME(),""."",3) ")
+	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)")
+
+	do classDef.Methods.Insert(methodDef)
+	
 	do classDef.%Save()
    
    	quit ##class(%SYSTEM.OBJ).Compile(fullClassName)
@@ -52,8 +61,10 @@ ClassMethod SaveMethod(mockName As %String, methodName As %String, params, respo
 
 /// Import mock and mocks data from .csv file
 /// Import proccess from the second line with format 'Name of the Mock; Method; parameters; Response; Rest method'
-ClassMethod MockMethodsFromCSV(filePath As %String)
+ClassMethod SaveMethodsFromCSV(filePath As %String)
 {
+	set saved = 0
+	set count = 0
    	set stream=##class(%Stream.FileCharacter).%New()
    	set sc=stream.LinkToFile(filePath)
    	do stream.Rewind()
@@ -79,12 +90,16 @@ ClassMethod MockMethodsFromCSV(filePath As %String)
      	}
      
      	if mockName'= "Name of the Mock" { // We do not want to take first line
-     		do ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)                  
-     	}
+		 	do $I(count)
+     		set sc = ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)                  
+			if sc=$$$OK {
+				do $I(saved)
+			}
+		}
    	}
+	write !, "It was saved ", saved, " methods from ", count, !
 	quit $$$OK
 }
-
 
 /// Is used when closing REST API into Docker
 /// Export Mock class and Mock data as a two files (.xml a .gof)
@@ -157,6 +172,7 @@ ClassMethod GetAllMethods(mockName As %String)
 ClassMethod DeleteMethod(mockName As %String, methodName As %String)
 {
 	kill ^MockMat(mockName, methodName)
+	write "The method ", methodName, " from mock ", mockName, " no longer exist.", !
 	quit $$$OK
 }
 
@@ -172,13 +188,16 @@ ClassMethod DeleteMethodWithParametr(mockName As %String, methodName As %String,
 	} else {
 		kill ^MockMat(mockName, methodName, restMethod, params)
 	}
+
+	write "The method ", methodName, " from mock ", mockName, "with parameters ", params, " no longer exist.", !
 }
 
 /// Delete Mock class definition and also clean global from this Mock (Mocks data)
 ClassMethod DeleteMock(mockName As %String)
 {
 	Kill ^MockMat(mockName)
-	quit ##class(%SYSTEM.OBJ).Delete(mockName)
+	quit ##class(%SYSTEM.OBJ).Delete("MockFW.Mocks."_mockName)
+	write "The mock ", mockName, "no longer exists",!
 }
 
 /// Delete all of the records and data
@@ -186,6 +205,12 @@ ClassMethod CleanAll()
 {
 	Kill ^MockMat
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
+}
+
+/// Initialize mock name for testing purpose (parse mock name from instance of full name class)
+ClassMethod InitMockForTest(serviceInstance)
+{
+	quit $PIECE($CLASSNAME(serviceInstance),".",3)
 }
 
 /// This method generates documentation for the certain mock
@@ -196,6 +221,9 @@ ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String, inCon
 		set filePath = "/opt/mockfw/export/"
 	}
 	set filePath = filePath_mockName_"Doc.xml"
+
+	write "Generating documentation of the mock ", mockName, " to do ", filePath, !
+
 	set file=##class(%File).%New(filePath)
 	do file.Open("WSN")
 	do file.WriteLine("<?xml version=""1.0"" encoding=""UTF-8""?>")
@@ -207,7 +235,7 @@ ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String, inCon
 	do file.WriteLine(..Tabs(2)_"<author>")
 	do file.WriteLine(..Tabs(3)_"<firstname>"_$USERNAME_"</firstname>")
 	do file.WriteLine(..Tabs(2)_"</author>")
-	do file.WriteLine(..Tabs(2)_"<pubdate>"_$PIECE($ZDATETIME($ZTIMESTAMP,1,1,2)," ", 1)_"</pubdate>")
+	do file.WriteLine(..Tabs(2)_"<pubdate>"_$PIECE($ZDATETIME($ZTIMESTAMP,4,1,2)," ", 1)_"</pubdate>")
 	do file.WriteLine($$$TAB_"</bookinfo>")
 	
 	
@@ -218,7 +246,11 @@ ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String, inCon
 	// first local mocked methods
 	set local = "false"
 	
-	set listMethods = ..GetAllMethods(mockName)
+
+	
+	//set listMethods = ..GetAllMethods(mockName)
+
+	#dim listMethods = ##class(%ListOfDataTypes).%New()
 	set key = $Order(^MockMat(mockName,""))
  	while (key '= "") {
 		do listMethods.Insert(key)

@@ -66,7 +66,6 @@ ClassMethod MethodCalled(class As %String, methodName As %String, Args...) As %S
 	set response = {}
 	set args = ..TransformArgsToList(Args...)
 	
-	// beru jen prvni paramtr, mozna by chtelo vsechny (pocitam s tim, ze vzdy dostanu object)
 	set params = args.GetAt(1)
 	
 	if ($ISOBJECT(params)) {
@@ -120,8 +119,8 @@ ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, me
  	}
  	if $Data(^MockMat(mockName, methodName, method, "DEFAULT")) {
  		set response = ^MockMat(mockName, methodName, method, "DEFAULT")
-		set code = ^MockMat(mockName, methodName, method, key, "code")
-		set delay = ^MockMat(mockName, methodName, method, key, "delay")
+		set code = ^MockMat(mockName, methodName, method, "DEFAULT", "code")
+		set delay = ^MockMat(mockName, methodName, method, "DEFAULT", "delay")
 		hang delay
  		quit $$$OK
  	}
