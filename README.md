@@ -100,7 +100,7 @@ After creating mock, it is generated the class of the mock in 'MockFW.Mocks' rep
 * *delay* As %Integer in seconds = 0
 * *force* As %Integer (1 | 0) = 0  -> 1 to force overwrite the same records 
 ```c++
-MOCKFW>do ##class((MockFW.MockManager)).SaveMethod("MyMock", "Method", "{""name"":""John"""}", "return", "POST", 204, 5, 1)
+MOCKFW>do ##class((MockFW.MockManager)).SaveMethod("MyMock", "Method", "{""name"":""John""}", "return", "POST", 204, 5, 1)
 ```
 Saving the method to the mock can be done also by direcly calling the class of the mock, see bellow.
 
@@ -116,7 +116,7 @@ MOCKFW>do ##class(MockFW.MockManager).SaveMethodsFromCSV("C:\Users\user\Desktop\
 * *dirPath* As %String -> directory, where the documentation will be generated
 * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
 ```c++
-MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\", 0)
+MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\")
 ```
 
 **ExportMock()** -- export mock for Docker usage 
@@ -166,7 +166,6 @@ MOCKFW>do ##class(MockFW.MockManager).DeleteMock("MyMock")
 MOCKFW>do ##class(MockFW.MockManager).CleanAll()
 ```
   
-    
      
 #### MockFW.Mocks.*NameOfTheMock*
 The generated class definition can be called in order to get predefined response. Also, it can be saved the mock method directly with this class.
@@ -183,10 +182,18 @@ The generated class definition can be called in order to get predefined response
 MOCKFW>do ##class(MockFW.Mocks.MyMock).SaveMethod("Method", "", "return", "GET", 404)
 ```
 
-**DispatchMethod()** - call certain method on specific mock class
+**DispatchClassMethod()** - call certain method on specific mock class
 * *params* As %String or object
 ```c++
-MOCKFW>do ##class(MockFW.Mocks.MyMock).Method("{""name"":""John"""}")
+MOCKFW>do ##class(MockFW.Mocks.MyMock).Method("{""name"":""John""}")
+```
+
+
+**DispatchMethod()** - call certain method on specific **instance** of mock class
+* *params* As %String or object
+```c++
+MOCKFW>set mock = ##class(MockFW.Mocks.MyMock).%New()
+MOCKFW>do mock.Method("param")
 ```
 
 #### Instruction to calll the mock via request

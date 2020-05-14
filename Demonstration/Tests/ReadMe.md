@@ -1,5 +1,24 @@
 ## Instructions for mocking server-side demonstration
-This is tutorial for demonstration of unit testing. Before start make sure the IRIS (Caché) is started in MOCKFW namespace. More detailed tutorial how to work with %UnitTest is on https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=TUNT_Part2. First copy this folder *Tests* to src folder and compile it.
+This is tutorial for demonstration of unit testing. More detailed tutorial how to work with %UnitTest is on https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=TUNT_Part2. 
+
+
+Classes in this package *Tests* needs to compile. It can be done before running the container by only copy this package **without ReadMe.md** to the *src* file of project foldr or when the container is already running by copy the this folder to *src* file folder and save (compile) every class separately.
+
+You can test whether the classes are compiled by (1 for existing class):
+```c++
+w ##class(%Dictionary.CompiledClass).%ExistsId("Tests.MathServices")
+```
+
+
+Don't forget to launch correctly thi IRIS terminal and switch to MOCKFW namespace:
+```sh
+$ docker exec -it onlymock iris session IRIS
+```
+To change to MOCKFW namespace:
+```c++
+USER>zn "MOCKFW"
+```
+
 
 1) Export Test classes as a XML file. If you are in Docker container, use dirPath */opt/mockfw/export/*, the files will be exported to *Expory* folder in project.
 ```c++
@@ -7,7 +26,7 @@ MOCKFW>do $system.OBJ.Export("Tests.TestTestedClass.cls", "/opt/mockfw/export/Un
 MOCKFW>do $system.OBJ.Export("Tests.TestTestedClassWithMock.cls", "/opt/mockfw/export/UnitTests/testFactorialWithMock.xml")
 ```
 
-1) Set the value of the ^UnitTestRoot global to the parent of the directory containing your exported test class
+2) Set the value of the ^UnitTestRoot global to the parent of the directory containing your exported test class
 ```c++
 MOCKFW>Set ^UnitTestRoot="/opt/mockfw/export"
 ```
@@ -17,4 +36,4 @@ MOCKFW>Set ^UnitTestRoot="/opt/mockfw/export"
 MOCKFW>do ##class(%UnitTest.Manager).RunTest("UnitTests")
 ```
 
-4) IRIS (Caché) loads the test class from the XML file, compiles the class, executes the test, deletes the test code from the server, and delivers a report to the terminal. 
+IRIS (Caché) loads the test class from the XML file, compiles the class, executes the test, deletes the test code from the server, and delivers a report to the terminal. 

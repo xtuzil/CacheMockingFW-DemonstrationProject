@@ -39,8 +39,7 @@ ClassMethod Compare(savedObject, params) As %Integer
 		return 1
 	}
 
-	w savedObject, !
-	w params, !
+
 		
 	try { // try transform string to object
 		if ('$ISOBJECT(savedObject)) {

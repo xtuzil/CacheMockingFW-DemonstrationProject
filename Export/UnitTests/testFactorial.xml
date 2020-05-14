@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="IRIS" version="26" zv="IRIS for UNIX (Ubuntu Server LTS for x86-64 Containers) 2020.1 (Build 199U)" ts="2020-05-14 13:25:01">
+<Class name="Tests.TestTestedClass">
+<Super>%UnitTest.TestCase,MockFW.MockManager</Super>
+<TimeChanged>65513,43262.631665</TimeChanged>
+<TimeCreated>65513,43262.631665</TimeCreated>
+
+<Property name="mathService">
+<Private>1</Private>
+</Property>
+
+<Property name="testedClass">
+<Private>1</Private>
+</Property>
+
+<Method name="OnBeforeAllTests">
+<FormalSpec>testname</FormalSpec>
+<ReturnType>%Status</ReturnType>
+<Implementation><![CDATA[
+	
+	set ..mathService = ##class(Tests.MathService).%New()
+	set ..testedClass = ##class(Tests.TestedClass).%New(..mathService)
+	quit $$$OK
+]]></Implementation>
+</Method>
+
+<Method name="TestFactorial">
+<Implementation><![CDATA[
+	
+	do $$$AssertEquals(..testedClass.Factorial(3),6)
+]]></Implementation>
+</Method>
+</Class>
+</Export>

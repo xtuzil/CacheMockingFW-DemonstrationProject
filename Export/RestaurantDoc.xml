@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+ <bookinfo>
+  <title>Restaurant - Mock documentation</title>
+  <author>
+   <firstname>irisowner</firstname>
+  </author>
+  <pubdate>14/05/2020</pubdate>
+ </bookinfo>
+ <chapter>
+  <title>ZK.Mocks.Restaurant</title>
+  <section>
+   <title>REST mocked methods</title>
+   <itemizedlist mark="opencircle">
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/meal/1</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>DELETE</entry>
+         <entry>NONE</entry>
+         <entry>Order Deleted</entry>
+         <entry>204</entry>
+         <entry>0</entry>
+        </row>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>{"id":1,"Name":"burger", "Alergens":[1,3,4], "Quantity":10}</entry>
+         <entry>200</entry>
+         <entry>0</entry>
+        </row>
+        <row>
+         <entry>PUT</entry>
+         <entry>{"Name":"burger", "Alergens":[1,3,4], "Quantity":9}</entry>
+         <entry>Order edited</entry>
+         <entry>200</entry>
+         <entry>3</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/meal/10</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>Meal does not exist</entry>
+         <entry>404</entry>
+         <entry>0</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/meals</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>{"Meals":[{"id":1,"Name":"burger", "Alergens":[1,3,4], "Quantity":10}, {"id":2,"Name":"rizoto", "Alergens":[1,5], "Quantity":5}]}</entry>
+         <entry>200</entry>
+         <entry>0</entry>
+        </row>
+        <row>
+         <entry>POST</entry>
+         <entry>{"Name":"burger", "Alergens":[1,3,4], "Quantity":10}</entry>
+         <entry>Meal was saved</entry>
+         <entry>201</entry>
+         <entry>3</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/order/1</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>DELETE</entry>
+         <entry>NONE</entry>
+         <entry>NONE</entry>
+         <entry>204</entry>
+         <entry>0</entry>
+        </row>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>{"id":1,"Name":"Martin Novak", "Phone":"783655545", "Meals":[{"id":2},{"id":3}], "Address": {"Town":"Brno", "Street":"Botanicka 68", "PostCode":"60200"}}</entry>
+         <entry>200</entry>
+         <entry>0</entry>
+        </row>
+        <row>
+         <entry>PUT</entry>
+         <entry>{"Name":"Martin Norvak", "Phone":"783655545", "Meals":[{"id":2},{"id":3}], "Address": {"Tow":"Brno", "Street":"Botanicka 68", "PostCode":"60200"}}</entry>
+         <entry>Order edited</entry>
+         <entry>200</entry>
+         <entry>0</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/order/2</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>Order does not exist</entry>
+         <entry>404</entry>
+         <entry>0</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/orders</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>{"Orders":[{"id":1},{"id":2},{"id":4},{"id":5}]}</entry>
+         <entry>200</entry>
+         <entry>2</entry>
+        </row>
+        <row>
+         <entry>POST</entry>
+         <entry>{"Name":"Martin Novak", "Phone":"783655545", "Meals":[], "Address": {"Town":"Brno", "Street":"Botanicka 68", "PostCode":"60200"}}</entry>
+         <entry>Order does not have any meal</entry>
+         <entry>400</entry>
+         <entry>3</entry>
+        </row>
+        <row>
+         <entry>POST</entry>
+         <entry>{"Name":"Martin Novak", "Phone":"783655545", "Meals":[{"id":2},{"id":3}], "Address": {"Town":"Brno", "Street":"Botanicka 68", "PostCode":"60200"}}</entry>
+         <entry>Order was saved</entry>
+         <entry>201</entry>
+         <entry>3</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+    <listitem>
+     <para>http://localhost:9092/api/mockfw/Restaurant/orders?delivered=false</para>
+     <table frame="all">
+      <tgroup align="left" cols="5">
+       <colspec colname="c1" colwidth="1*"/>
+       <colspec colname="c2" colwidth="3*"/>
+       <colspec colname="c3" colwidth="3*"/>
+       <colspec colname="c4" colwidth="1*"/>
+       <colspec colname="c5" colwidth="1*"/>
+       <thead>
+        <row>
+         <entry>HTTP method</entry>
+         <entry>Body</entry>
+         <entry>Response</entry>
+         <entry>Return code</entry>
+         <entry>Delay(s)</entry>
+        </row>
+       </thead>
+       <tbody>
+        <row>
+         <entry>GET</entry>
+         <entry>NONE</entry>
+         <entry>{"UndeliveredOrders":[{"id":2},{"id":4},{"id":3}]}</entry>
+         <entry>200</entry>
+         <entry>4</entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </table>
+    </listitem>
+   </itemizedlist>
+  </section>
+ </chapter>
+</book>
