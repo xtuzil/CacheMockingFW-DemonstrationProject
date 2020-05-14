@@ -5,10 +5,10 @@ This is a Demonstration Project folder for Caché Mocking framework. This projec
 
 
 ## Instructions for demonstration the features
-To start the Docker container with daplatform IRIS with Caché Mocking framework, put sequence of Docker commands to the bash terminal in this folder location:
+To start the Docker container with dataplatform IRIS with Caché Mocking framework, put sequence of Docker commands to the bash terminal in this folder location:
 ```sh
-docker-compose build
-docker-compose up -d
+$ docker-compose build
+$ docker-compose up -d
 ```
 
 Now you are free to try whatever you want. For inspiration use documentation below.
@@ -16,8 +16,8 @@ Now you are free to try whatever you want. For inspiration use documentation bel
 There is also some demonstration prepared in this project folder **Demonstartion**. See sub-folders for more instructions.
 
 Whenever you want to stop container, put Docker commands:
-```
-docker-compose down
+```sh
+$ docker-compose down
 ```
 
 
