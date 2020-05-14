@@ -1,5 +1,5 @@
 ## Instructions for mocking server-side demonstration
-This is tutorial for demonstration of mocking server-side in client-server applications. This tutorial takes you through . Prepared endpoints for **Restaurant** mock are defined in file *mock_data.csv*. 
+This is tutorial for demonstration of mocking server-side in client-server applications. This tutorial takes you through mocking Restaurant mock. Prepared endpoints for **Restaurant** mock are defined in file *mock_data.csv*. 
 
 Before start make sure the IRIS (Caché) is started in MOCKFW namespace. After the container is ready, switch to IRIS terminal:
 ```sh
@@ -37,9 +37,9 @@ MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("Restaurant", "", 1)
 ```
 Transformed DocBook documentation by XMLmind from generated XML file is in this folder for showcase (both PDF version and also Web Help)
 
-3) Done! The mock is available on your application port. In container is default port 9092. To send request, try this this URL in web browser (better in Postman app) :
-login: mockuser
-password: 12345
+1) Done! The mock is available on your application port. In container is default port 9092. To send request, try this URL in web browser (better in Postman app):  
+login: mockuser  
+password: 12345  
 ```
 http://localhost:9092/api/mocks/Restaurant/orders
 ```
