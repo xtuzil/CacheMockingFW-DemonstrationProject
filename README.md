@@ -1,7 +1,25 @@
-# Caché mocking framework Docker template for distribution
-This is the template project for Docker distribution of certain mock. It is based on Intersystems objectscript community template: https://github.com/intersystems-community/objectscript-docker-template
+# Caché Mocking framework - Demonstration Project
+This is a Demonstration Project folder for Caché Mocking framework. This project contains everything necessary to try every feature of this Caché Mocking FW. For importing framework to Caché see [separated repository with only ObjectScript classes and XML importing file](https://github.com/xtuzil/CacheMockingFW). The [template for distribution](https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution) is also on separated repository.
 
-**Caché mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché via terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server side applications or in unit tests.
+**Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché via terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server side applications or in unit tests.
+
+
+## Instructions for demonstration the features
+To start the Docker container with daplatform IRIS with Caché Mocking framework, put sequence of Docker commands to the bash terminal in this folder location:
+```sh
+docker-compose build
+docker-compose up -d
+```
+
+Now you are free to try whatever you want. For inspiration use documentation below.
+
+There is also some demonstration prepared in this project folder **Demonstartion**. See sub-folders for more instructions.
+
+Whenever you want to stop container, put Docker commands:
+```
+docker-compose down
+```
+
 
 ## Instructions for docker mock user 
 As a mock user in Docker you have two options how you can obtain the mock:
@@ -53,7 +71,7 @@ As a mock user in Docker you have two options how you can obtain the mock:
     ```sh
     http://localhost:9092/api/mocks/MyMock/MethodUrl
     ```
-    But beware, this approach does not allow to call the mock from IRIS terminal and so the change in the mock is not possible. Also, this requires almost double downloaded amount of the data
+    But beware, this approach does not allow to save changes to the mock for later usage. Also, this requires almost double downloaded amount of the data.
     
 Look at the dockbook documentation to see all mocked methods in the mock!
 
@@ -98,7 +116,7 @@ MOCKFW>do ##class(MockFW.MockManager).SaveMethodsFromCSV("C:\Users\user\Desktop\
 * *dirPath* As %String -> directory, where the documentation will be generated
 * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
 ```c++
-MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\", 1)
+MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("MyMock", "C:\Users\user\Desktop\", 0)
 ```
 
 **ExportMock()** -- export mock for Docker usage 
@@ -231,7 +249,7 @@ b) Build the container and push it to Docker hub. The user will launch the mock 
         $ docker push myrepozitary/imagename:version
         ```
    7. Send the name of tag to the user. He can run the container only by one docker command
-   * this approach **does not allow** user to call the mock from IRIS terminal an also to edit the distributed mock
+   * this approach allow user to call the mock from IRIS terminal an also to edit the distributed mock but **does not allow** to save changes to the mock for later usage,
     
     
 @Matěj Tužil 2020

@@ -4,16 +4,21 @@ Class MockFW.MockBase Extends (%RegisteredObject, MockFW.Utils, %SYSTEM.Event)
 /// Save method of Mock to the global if does not already exist
 ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMethod As %String = "", code = 200, delay = 0, force = 0) As %Status
 {
-	
-	if (restMethod="GET") {
-		set params = "GET"
+
+	if (params="") {
+		set params= "NONE"
 	}
-	
-	if (mockName="") || (methodName="") || (params="") || (response="") {
+
+	if (restMethod'="") && (response=""){
+		set response= "NONE"
+	}
+
+	if (mockName="") || (methodName="") || (response="") {
 		w !, "ERROR: One of the compulsory parameters is missing."
 		quit '$$$OK
 	}
-	
+
+
 	if ($ISOBJECT(params)) {
 		set params = params.%ToJSON()
 	}
@@ -36,6 +41,8 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 		}
 		
 		set ^MockMat(mockName, methodName, params) = response
+
+		w "Method ", methodName, " was succesfully saved to mock ", mockName, "!", !
 		
 	} else {
 		
@@ -50,13 +57,24 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 				quit '$$$OK
 			}
 		}
-		
+
+		try {
+			set check = {}.%FromJSON(params)
+		} catch errobj {
+			if params'="NONE" {
+				w "WARNING: The body of the request is not valid JSON...  "
+			}
+		}
+
 		set ^MockMat(mockName, methodName, restMethod, params) = response
 		set ^MockMat(mockName, methodName, restMethod, params, "code") = code
 		set ^MockMat(mockName, methodName, restMethod, params, "delay") = delay
+
+		w "Method ", restMethod, " with url ", methodName, " was succesfully saved to mock ", mockName, "!", ! 
+
+
 	}
 	
-	w !, "Saved!"
 	quit $$$OK
 }
 
@@ -101,10 +119,11 @@ ClassMethod GetMockedResponse(mockName As %String, methodName As %String, params
 ClassMethod GetMockedResponseREST(mockName As %String, methodName As %String, method As %String, body, Output response, Output code) As %Status
 {
 	set response=""
-	if method="GET" {
-		set body = "GET"
+
+	if ((body.%ToJSON())="{}") {
+		set body = "NONE"
 	}
-	
+
 	set key = $Order(^MockMat(mockName, methodName, method,""))
  	while (key '= "") {
      	set sc = ..Compare(key, body)

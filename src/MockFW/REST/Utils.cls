@@ -20,16 +20,18 @@ ClassMethod ReadRequestToObject(Output obj, setIfNone = "", convertToUtf8 = 1) A
 ClassMethod WriteResponse(response, code, SC As %Status, encode As %Boolean = 0) As %Status
 {
 	quit:response="" SC
+	set:response="NONE" response=""
 	quit:SC'=$$$OK SC
 	set %response.Status = code
 
 	set stream=##class(%Stream.GlobalCharacter).%New()
-	if '..CanConvertToJSON(response) {
+
+	try {
+		set response={}.%FromJSON(response)
+	} catch {
 		set res = {}
 		do res.%Set("Response",response)
 		set response = res
-	} else {
-		set response={}.%FromJSON(response)
 	}
 
 	do response.%ToJSON(stream)

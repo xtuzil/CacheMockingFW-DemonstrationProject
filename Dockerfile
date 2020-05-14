@@ -27,4 +27,3 @@ RUN \
 # bringing the standard shell back
 SHELL ["/bin/bash", "-c"]
 
-

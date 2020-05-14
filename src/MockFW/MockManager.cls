@@ -82,13 +82,7 @@ ClassMethod SaveMethodsFromCSV(filePath As %String)
      	//Convert to objects because of way how we are saving
      	set params =  ..CutExtraQuotes(params)
      	set response =  ..CutExtraQuotes(response)
-     	if ..CanConvertToJSON(params) {
-     		set params={}.%FromJSON(params)
-     	}
-     	if ..CanConvertToJSON(response) = 1 {
-     		set response={}.%FromJSON(response)
-     	}
-     
+
      	if mockName'= "Name of the Mock" { // We do not want to take first line
 		 	set count = count + 1
      		set sc = ##class(MockFW.MockBase).SaveMethod(mockName, methodName, params, response, restMethod, code, delay, force)                  
@@ -107,11 +101,6 @@ ClassMethod SaveMethodsFromCSV(filePath As %String)
 /// mockName = e.g. MyMock
 ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer As %Integer = 0) As %Status
 {
-	set className = "MockFW.Mocks."_mockName
-	set exist=##class(%Dictionary.CompiledClass).%ExistsId(className)
-	if 'exist {
-		quit '$$$OK
-	}
 	
 	if inContainer {
 		set dirPath = "/opt/mockfw/export/"
@@ -120,6 +109,13 @@ ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer As %
 	}
 
 	do ..ExportMockData(mockName, dirPath)
+
+	set className = "MockFW.Mocks."_mockName
+	set exist=##class(%Dictionary.CompiledClass).%ExistsId(className)
+	if 'exist {
+		write "The class definition of mock "_mockName_" does not exist. Only global exported (might be empty)."
+		quit '$$$OK
+	}
 	do ..ExportMockClass(mockName, dirPath)
 
 	quit $$$OK
@@ -138,7 +134,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status [
 ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status [ Private ]
 {
 	set fullClassName = "MockFW.Mocks."_mockName_".cls"
-	set filePath = dirPath_"mockClass.xml"
+	set filePath = dirPath_"mockClass"_mockName_".xml"
 	quit $system.OBJ.Export(fullClassName, filePath)
 }
 
@@ -207,7 +203,7 @@ ClassMethod CleanAll()
 	quit ##class(%SYSTEM.OBJ).DeletePackage("MockFW.Mocks")
 }
 
-/// Initialize mock name for testing purpose (parse mock name from instance of full name class)
+/// Initialize mock name for testing purpose (parse mock name from instance of full class name)
 ClassMethod InitMockForTest(serviceInstance)
 {
 	quit $PIECE($CLASSNAME(serviceInstance),".",3)
@@ -242,14 +238,10 @@ ClassMethod GenerateDocumentation(mockName As %String, dirPath As %String, inCon
 	do file.WriteLine($$$TAB_"<chapter>")
 	do file.WriteLine(..Tabs(2)_"<title>ZK.Mocks."_mockName_"</title>")
 	
-	
+
 	// first local mocked methods
 	set local = "false"
 	
-
-	
-	//set listMethods = ..GetAllMethods(mockName)
-
 	#dim listMethods = ##class(%ListOfDataTypes).%New()
 	set key = $Order(^MockMat(mockName,""))
  	while (key '= "") {

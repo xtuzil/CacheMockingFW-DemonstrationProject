@@ -4,8 +4,8 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: onlymock
     restart: always
+    container_name: onlymock
     ports: 
       - "9091:51773"
       - "9092:52773"

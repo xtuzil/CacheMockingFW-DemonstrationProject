@@ -1,7 +1,7 @@
 Class MockFW.Utils Extends %RegisteredObject
 {
 
-/// Auxiliary method, which add multiple $$$TAB to line of generated code
+/// Method, which add multiple $$$TAB to line of generated code
 ClassMethod Tabs(count)
 {
 	set res = ""
@@ -12,7 +12,7 @@ ClassMethod Tabs(count)
 }
 
 /// Auxiliary method for retrieving from .csv.
-/// Cut extra double quotes to secure saving
+/// Cut extra double quotes to corect saving
 ClassMethod CutExtraQuotes(string As %String) As %String
 {
 	set n = $Length(string)
@@ -33,62 +33,123 @@ ClassMethod CutExtraQuotes(string As %String) As %String
 
 /// Compare two strings (potentionally objects)
 ClassMethod Compare(savedObject, params) As %Integer
-{	
+{
+	
 	if savedObject = params {
 		return 1
 	}
-	
-	if ($ISOBJECT(savedObject)) {
-			set savedObject=savedObject.%ToJSON()
-	}
+
+	w savedObject, !
+	w params, !
 		
-	if ($ISOBJECT(params)) {
-		set params=params.%ToJSON()
-	}
-	
-	if (..CanConvertToJSON(savedObject)) && (..CanConvertToJSON(params)) {
-		
+	try { // try transform string to object
 		if ('$ISOBJECT(savedObject)) {
 			set savedObject={}.%FromJSON(savedObject)
 		}
 		if ('$ISOBJECT(params)) {
 			set params={}.%FromJSON(params)
 		}
-		
+		return ..CompareObjects(savedObject, params)
+
+	} catch errobj { // one of string can not be tranform to object
+		return 0
+	}
+}
+
+/// Method compare two dynamic objects
+ClassMethod CompareObjects(savedObject, params) As %Status
+{
 		if ((..CountAtributes(savedObject)) '= (..CountAtributes(params))) {
-			return 0
+			quit 0
 		}
 
 		set iterator = params.%GetIterator()
-    
     	while iterator.%GetNext(.key, .value) {
-    		if (savedObject.%Get(key) '= value) {
-    			return 0
-    		}
+			if ($ISOBJECT(value)) {
+				set valueS = savedObject.%Get(key)
+				if (('$ISOBJECT(valueS)) || ($CLASSNAME(value)'=$CLASSNAME(valueS))) {
+					return 0
+				}
+
+				if ($CLASSNAME(value)="%Library.DynamicObject") { // compare nested objects
+					if ('..CompareObjects(value, valueS)) {
+						return 0
+					}
+				} else {
+				 	if ('..CompareArrays(value, valueS)) { // compare nested arrays
+						return 0
+					}
+				}
+			} else {
+    			if (savedObject.%Get(key) '= value) {
+    				return 0
+    			}
+			}
    
 		}
-    	return 1
+	quit 1
+}
+
+/// Method compare two dynamic arrays
+ClassMethod CompareArrays(saved, params) As %Status
+{
+	if (saved.%Size() '= params.%Size()) {
+		return 0
 	}
-	return 0
+
+	set iterator = params.%GetIterator()
+
+	while iterator.%GetNext(.key, .value) {
+		set iteratorS = saved.%GetIterator()
+		set found = "false"
+		while iteratorS.%GetNext(.keyS, .valueS) {
+			if ($ISOBJECT(value) && '$ISOBJECT(valueS)) || ('$ISOBJECT(value) && $ISOBJECT(valueS)) {
+				continue
+			}
+
+			if ($ISOBJECT(value)) {
+				if ($CLASSNAME(value)="%Library.DynamicObject") { // compare nested objects
+					if (..CompareObjects(value, valueS)) {
+						set found = "true"
+						quit
+					}
+				} else {
+				 	if (..CompareArrays(value, valueS)) { // compare nested arrays
+						set found = "true"
+						quit
+					}
+				}
+			} else {
+				if value=valueS {
+					set found = "true"
+					quit
+				}
+			}	
+		}
+		if found="false" {
+			return 0
+		}
+	}
+	quit 1
 }
 
 /// Return '1' if the string can be transformed to the object, else '0'
 /// Use regex syntax. Work right only for two layers of json object 
-ClassMethod CanConvertToJSON(obj) As %Integer
+ClassMethod CanConvertToJSON(json) As %Integer
 {
-	set objWithoutSpaces = $ZSTRIP(obj,"*W")
-
-	set item = "\""[:alnum:]+\"""
-	set element = item_"\:"_item
+	set jsonWithoutSpaces = $ZSTRIP(json,"*W")
+	set item = "(\""[:alnum:]+\"")"
+	set itemValue = "((\""[:alnum:]+\"")|([:digit:]+))"
+	set element = item_"\:"_itemValue
 	set object = "\{("_element_"\,)*"_element_"\}"
-	set array = "\[((("_element_"\,)*"_element_")|(("_object _"\,)*"_object_")|(("_item _"\,)*"_item_"))\]"
+	set array = "((\[((("_element_"\,)*"_element_")|(("_object _"\,)*"_object_")|(("_itemValue _"\,)*"_itemValue_"))\])|(\[\]))"
 
 	set objectInObject = item_"\:"_object
 	set arrayInObject = item_"\:"_array
 
 	set regex = "\{((("_element_")|("_objectInObject_")|("_arrayInObject_"))\,)*(("_element_")|("_objectInObject_")|("_arrayInObject_"))\}"
 	
-	return $match(objWithoutSpaces, regex)
+	return $match(jsonWithoutSpaces, regex)
 }
 
 /// Auxiliary method. Count the atributes of object
