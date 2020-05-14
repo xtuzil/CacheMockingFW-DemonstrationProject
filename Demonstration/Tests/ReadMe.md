@@ -1,4 +1,4 @@
-## Instructions for mocking server-side demonstration
+## Instructions for unit testing demonstration
 This is tutorial for demonstration of unit testing. More detailed tutorial how to work with %UnitTest is on https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=TUNT_Part2. 
 
 
