@@ -2,15 +2,15 @@
 This is tutorial for demonstration of unit testing. More detailed tutorial how to work with %UnitTest is on https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=TUNT_Part2. 
 
 
-Classes in this package *Tests* needs to compile. It can be done before running the container by only copy this package **without ReadMe.md** to the *src* file of project foldr or when the container is already running by copy the this folder to *src* file folder and save (compile) every class separately.
+Classes in this package *Tests* needs to compile. It can be done before running the container by only copy this package **without ReadMe.md** to the *src* file of project folder or when the container is already running by copy the this folder to *src* file folder and save (compile) every class separately.
 
-You can test whether the classes are compiled by (1 for existing class):
+You can test whether the classes are compiled by (should write '1' if the class is compiled):
 ```c++
 w ##class(%Dictionary.CompiledClass).%ExistsId("Tests.MathServices")
 ```
 
 
-Don't forget to launch correctly thi IRIS terminal and switch to MOCKFW namespace:
+Don't forget to launch correctly the IRIS terminal and switch to MOCKFW namespace:
 ```sh
 $ docker exec -it onlymock iris session IRIS
 ```
@@ -19,7 +19,8 @@ To change to MOCKFW namespace:
 USER>zn "MOCKFW"
 ```
 
-
+  
+  
 1) Export Test classes as a XML file. If you are in Docker container, use dirPath */opt/mockfw/export/*, the files will be exported to *Expory* folder in project.
 ```c++
 MOCKFW>do $system.OBJ.Export("Tests.TestTestedClass.cls", "/opt/mockfw/export/UnitTests/testFactorial.xml")
