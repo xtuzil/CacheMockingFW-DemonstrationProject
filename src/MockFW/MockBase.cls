@@ -28,7 +28,7 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 		set response = response.%ToJSON()
 	}
 	
-	if (restMethod="") {
+	if (restMethod="") { // save local method
 		if 'force {
 			if ($DATA(^MockMat(mockName, methodName, params))) {
 					write !, "ERROR: The record with same parameters already exists."
@@ -45,7 +45,7 @@ ClassMethod SaveMethod(mockName, methodName As %String, params, response, restMe
 
 		write "Method ", methodName, " was succesfully saved to mock ", mockName, "!", !
 		
-	} else {
+	} else { //save endpoint
 		
 		if 'force {
 			if ($DATA(^MockMat(mockName, methodName, restMethod, params))) {

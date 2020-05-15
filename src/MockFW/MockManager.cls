@@ -15,18 +15,15 @@ ClassMethod CreateMock(className As %String) As %Status
 	set classDef=##class(%Dictionary.ClassDefinition).%New()
 	set classDef.Name=fullClassName
 	set classDef.ProcedureBlock=1
-	
 	set classDef.Super = "MockFW.MockBase"
 	
 	set methodDef = ##class(%Dictionary.MethodDefinition).%New()
 	set methodDef.Name = "SaveMethod"	
-	
 	set methodDef.ClassMethod = "1"
 	set methodDef.ReturnType = "%Status"
 	set methodDef.FormalSpec="methodName:%String,params,return,restMethod:%String="""",code=200,delay=0,force=0"	
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE($CLASSNAME(),""."",3) ")
 	do methodDef.Implementation.WriteLine($$$TAB_" do ##super(mockName, methodName, params, return, restMethod, code, delay, force)")
-	
 	do classDef.Methods.Insert(methodDef)
 	
 	set methodDef = ##class(%Dictionary.MethodDefinition).%New()
@@ -35,7 +32,6 @@ ClassMethod CreateMock(className As %String) As %Status
 	set methodDef.FormalSpec="Class:%String,methodName:%String,Args..."
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE(Class,""."",3) ")
 	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)")
-
 	do classDef.Methods.Insert(methodDef)
 	
 	
@@ -44,11 +40,9 @@ ClassMethod CreateMock(className As %String) As %Status
 	set methodDef.FormalSpec="methodName:%String,Args..."
 	do methodDef.Implementation.WriteLine($$$TAB_" set mockName = $PIECE($CLASSNAME(),""."",3) ")
 	do methodDef.Implementation.WriteLine($$$TAB_" quit ##class(MockFW.MockBase).MethodCalled(mockName, methodName, Args...)")
-
 	do classDef.Methods.Insert(methodDef)
 	
 	do classDef.%Save()
-   
    	quit ##class(%SYSTEM.OBJ).Compile(fullClassName)
 }
 
@@ -60,7 +54,8 @@ ClassMethod SaveMethod(mockName As %String, methodName As %String, params, respo
 }
 
 /// Import mock and mocks data from .csv file
-/// Import proccess from the second line with format 'Name of the Mock; Method; parameters; Response; Rest method'
+/// Import proccess from the second line with  'format 
+/// Name of the Mock; Method(endpoint); parameters; Response; Rest method; Return code, delay, force'
 ClassMethod SaveMethodsFromCSV(filePath As %String)
 {
 	set saved = 0
@@ -101,7 +96,6 @@ ClassMethod SaveMethodsFromCSV(filePath As %String)
 /// mockName = e.g. MyMock
 ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer As %Integer = 0) As %Status
 {
-	
 	if inContainer {
 		set dirPath = "/opt/mockfw/export/"
 	} else {
@@ -124,7 +118,6 @@ ClassMethod ExportMock(mockName As %String, dirPath As %String, inContainer As %
 /// Auxiliary method, exports Mocks data
 ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status [ Private ]
 {
-	  
 	set global = "MockMat("_mockName
 	set filePath = dirPath_mockName_"Global.gof"
 	quit ##class(%Library.Global).Export(,global,filePath)
