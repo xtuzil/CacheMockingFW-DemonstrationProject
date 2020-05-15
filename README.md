@@ -217,7 +217,7 @@ http://localhost:CachéPort/api/mocks/MyMock/MethodUrl
 ## Instructions for FW user to distribute mock via Docker
 1. To distribute mock via Docker, first it is neccessary to prepare template directory of the project from the git. 
 ```sh
-$ git clone https://github.com/xtuzil/MockFW.git  # or pull
+$ git clone https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution  # or pull
 ```
 2. Export mock data from Caché:
     * *nameOfTheMock* As %String
@@ -249,14 +249,14 @@ b) Build the container and push it to Docker hub. The user will launch the mock 
         
    5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).  
         ```sh
-        $ docker tag mock1 myrepozitary/imagename:version
+        $ docker tag mock1 myrepository/imagename:version
          ```
    6. Now, push the image to the registry using the image ID.  
         ```sh
-        $ docker push myrepozitary/imagename:version
+        $ docker push myrepository/imagename:version
         ```
    7. Send the name of tag to the user. He can run the container only by one docker command
-   * this approach allow user to call the mock from IRIS terminal an also to edit the distributed mock but **does not allow** to save changes to the mock for later usage,
+   * this approach allow user to call the mock from IRIS terminal an also to edit the distributed mock but **does not allow** to save changes to the mock for later usage!
     
     
 @Matěj Tužil 2020

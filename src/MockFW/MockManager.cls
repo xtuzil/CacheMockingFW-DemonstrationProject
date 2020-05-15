@@ -126,7 +126,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status [
 {
 	  
 	set global = "MockMat("_mockName
-	set filePath = dirPath_"dataGlobal.gof"
+	set filePath = dirPath_mockName_"Global.gof"
 	quit ##class(%Library.Global).Export(,global,filePath)
 }
 
