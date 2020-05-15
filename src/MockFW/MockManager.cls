@@ -134,7 +134,7 @@ ClassMethod ExportMockData(mockName As %String, dirPath As %String) As %Status [
 ClassMethod ExportMockClass(mockName As %String, dirPath As %String) As %Status [ Private ]
 {
 	set fullClassName = "MockFW.Mocks."_mockName_".cls"
-	set filePath = dirPath_"mockClass"_mockName_".xml"
+	set filePath = dirPath_mockName_"MockClass.xml"
 	quit $system.OBJ.Export(fullClassName, filePath)
 }
 

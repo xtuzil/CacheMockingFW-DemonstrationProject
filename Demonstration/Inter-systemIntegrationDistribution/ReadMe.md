@@ -11,7 +11,7 @@ $ git clone https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-dis
 
 2. Next is necessary to export mock data. If you doing this from container, you can put third parameter to '1'. That means the path is ignored and data are exported to *Export* folder in this project.
 ```c++
-MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "opt/mockfw/export", 1)
+MOCKFW>do ##class(MockFW.MockManager).ExportMock("Restaurant", "opt/mockfw/export", 1)
 ```
   
     
