@@ -2,7 +2,7 @@
 This is tutorial for demonstration of unit testing. More detailed tutorial how to work with %UnitTest is on https://docs.intersystems.com/irislatest/csp/docbook/Doc.View.cls?KEY=TUNT_Part2. 
 
 
-Classes in this package *Tests* needs to compile. It can be done before running the container by only copy this package **without ReadMe.md** to the *src* file of project folder or when the container is already running by copy the this folder to *src* file folder and save (compile) every class separately.
+Classes in this package *Tests* needs to compile. It can be done before running the container by only copy this package **without ReadMe.md** to the *src* file of project folder or when the container is already running by copy this folder to *src* file folder and save (compile) every class separately.
 
 You can test whether the classes are compiled by (should write '1' if the class is compiled):
 ```c++
