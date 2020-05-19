@@ -1,0 +1,15 @@
+{
+  "files.associations": {
+  
+      "Dockerfile*": "dockerfile",
+    },
+  "objectscript.conn" :{
+    "ns": "MOCKFW",
+    "active": true,
+    "port": 9092,
+    "docker-compose": {
+      "service": "iris",
+      "internalPort": 52773
+    },
+  },
+}
