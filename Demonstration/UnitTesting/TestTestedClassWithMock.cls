@@ -19,7 +19,6 @@ Method TestFactorial()
 	set className = ..InitMockForTest(..mathService)
 	
 	do ..SaveMethod(className, "Multiply", "{""first"":1,""second"":1}", 1)
-	w "dopr"
 	do ..SaveMethod(className, "Multiply", "{""first"":1,""second"":2}", 2)
 	do ..SaveMethod(className, "Multiply", "{""first"":2,""second"":3}", 6)
 	

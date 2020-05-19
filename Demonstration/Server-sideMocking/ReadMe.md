@@ -23,7 +23,7 @@ MOCKFW>do ##class(MockFW.MockManager).CreateMock("Restaurant")
     ```
     or
     ```c++
-    MOCKFW>do ##class(MockFW.Mocks.Restaurant).SaveMethod("orders", , "{""Orders"":[{""id"":1},{""id"":2},{""id"":4},{""id"":5}]}", "GET", 200)
+    MOCKFW>do ##class(MockFW.Mocks.Restaurant).SaveMethod("orders", "", "{""Orders"":[{""id"":1},{""id"":2},{""id"":4},{""id"":5}]}")
     ```
    * Saving methods (endpoints) from file. If you are in Docker container, copy the CSV file to *Export* folder and fill path */opt/mockfw/export/mock_data.csv*.
     ```c++

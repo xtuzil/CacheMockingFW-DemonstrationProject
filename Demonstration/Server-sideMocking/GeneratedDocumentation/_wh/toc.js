@@ -1,8 +1,9 @@
-var whStorageId = "ut2a3sinjkno";
+var whStorageId = "eh3p4uqemwmu";
 var whTOC = [
 ["Restaurant - Mock documentation","index.html",[
-["ZK.Mocks.Restaurant","ch01.html",[
-["REST mocked methods","ch01s01.html",null]
+["MockFW.Mocks.Restaurant","ch01.html",[
+["Local mocked methods","ch01s01.html",null],
+["REST mocked methods","ch01s02.html",null]
 ]]
 ]]
 ];

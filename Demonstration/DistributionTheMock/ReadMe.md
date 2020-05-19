@@ -2,8 +2,7 @@
 This is tutorial for demonstration of distribution for inter-system integration. This tutorial takes you through distribution the mock Restaurant which was mocked in *Server-sideMocking* section.
 
 
-1. To distribute mock via Docker, first it is neccessary to prepare template directory of the project from the git. 
-   In this case, this project folder can server as template, so there is no needs to download following template from git.
+1. To distribute mock via Docker, first it is neccessary to prepare template directory of the project from the git. In this case, this project folder can serves as template, so there is **no needs to download following** template from git.
 ```sh
 $ git clone https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution  # or pull
 ```
