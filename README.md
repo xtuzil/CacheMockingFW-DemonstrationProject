@@ -1,5 +1,5 @@
-# Caché Mocking framework - Demonstration Project
-This is a Demonstration Project folder for Caché Mocking framework. This project contains everything necessary to try every feature of this Caché Mocking FW. For importing framework to Caché see [separated repository with only ObjectScript classes and XML importing file](https://github.com/xtuzil/CacheMockingFW). The [template for distribution](https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution) is also on separated repository.
+# Caché Mocking Framework - Demonstration Project
+This is a Demonstration Project folder for Caché Mocking framework. This project contains everything necessary to try every feature of this Caché Mocking FW on Docker project with IRIS dataplatform, which allows the same functionality as Caché. For importing framework to Caché see [separated repository with only ObjectScript classes and XML importing file](https://github.com/xtuzil/CacheMockingFW). The [template for distribution](https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution) is also on separated repository.
 
 **Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché/IRIS, via Caché/IRIS terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server applications or in unit tests.
 
