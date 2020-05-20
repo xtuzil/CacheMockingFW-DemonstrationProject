@@ -1,5 +1,5 @@
 ## Instructions for distribution demonstration for inter-system integration
-This is tutorial for demonstration of distribution for inter-system integration. This tutorial takes you through distribution the mock Restaurant which was mocked in *Server-sideMocking* section.
+This is tutorial for demonstration of distribution for inter-system integration. This tutorial takes you through distribution the mock Restaurant which was mocked in *Server-sideMocking* section. This section requires to have done previous section.
 
 
 1. To distribute mock via Docker, first it is neccessary to prepare template directory of the project from the git. In this case, this project folder can serves as template, so there is **no needs to download following** template from git.
