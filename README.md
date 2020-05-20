@@ -1,7 +1,7 @@
 # Caché Mocking Framework - Demonstration Project
 This is a Demonstration Project folder for Caché Mocking framework. This project contains everything necessary to try every feature of this Caché Mocking FW on Docker project with IRIS dataplatform, which allows the same functionality as Caché. For importing framework to Caché see [separated repository with only ObjectScript classes and XML importing file](https://github.com/xtuzil/CacheMockingFW). The [template for distribution](https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution) is also on separated repository.
 
-**Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché/IRIS, via Caché/IRIS terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server applications or in unit tests.
+**Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché/IRIS, via Caché/IRIS terminal, through REST API in the range of Caché web server or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server applications or in unit tests.
 
 
 ## Instructions for demonstration the features
@@ -20,7 +20,7 @@ http://localhost:9092/csp/sys/UtilHome.csp?$NAMESPACE=MOCKFW
 
 Now you are free to try whatever you want. For inspiration use documentation below.
 
-There is also some demonstration prepared in this project folder **Demonstartion** which carries you through the framework features. See sub-folders for more instructions.
+There is also some demonstration prepared in this project folder **Demonstration** which carries you through the framework features. See sub-folders for more instructions.
 
 Whenever you want to stop container, put Docker commands:
 ```sh
