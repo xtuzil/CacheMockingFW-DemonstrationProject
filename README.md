@@ -1,83 +1,33 @@
 # Caché Mocking framework - Demonstration Project
 This is a Demonstration Project folder for Caché Mocking framework. This project contains everything necessary to try every feature of this Caché Mocking FW. For importing framework to Caché see [separated repository with only ObjectScript classes and XML importing file](https://github.com/xtuzil/CacheMockingFW). The [template for distribution](https://github.com/xtuzil/CacheMockingFW-DockerIRIS-template-for-distribution) is also on separated repository.
 
-**Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché via terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server side applications or in unit tests.
+**Caché Mocking framework** is framework (package) for the Caché intended for mocking simple objects or even complex APIs. After the predefining the mocks and its method, the mock can be called from Caché/IRIS, via Caché/IRIS terminal, through REST API in the range of Caché web server, or from anywhere through REST API using Docker technology. The framework is suitable to use in integration, client-server applications or in unit tests.
 
 
 ## Instructions for demonstration the features
+The suggestion is to work with this project folder in VS Code. There are settings for VS Code which allows to compile ObjectScript classes while the container with IRIS is running. 
+
 To start the Docker container with dataplatform IRIS with Caché Mocking framework, put sequence of Docker commands to the bash terminal in project folder location:
 ```sh
 $ docker-compose build
 $ docker-compose up -d
 ```
 
+You can try to log in to IRIS Managment Portal to easy discover if the container is running:
+```
+http://localhost:9092/csp/sys/UtilHome.csp?$NAMESPACE=MOCKFW
+```
+
 Now you are free to try whatever you want. For inspiration use documentation below.
 
-There is also some demonstration prepared in this project folder **Demonstartion**. See sub-folders for more instructions.
+There is also some demonstration prepared in this project folder **Demonstartion** which carries you through the framework features. See sub-folders for more instructions.
 
 Whenever you want to stop container, put Docker commands:
 ```sh
 $ docker-compose down
 ```
 
-
-## Instructions for docker mock user 
-As a mock user in Docker you have two options how you can obtain the mock:
-1. Obtain the mock via compressed folder
-    Setup:
-    * unwrap the project folder 
-    * open the project directory in terminal 
-    * build docker image and run the container
-    ```sh
-    $ docker-compose build
-    $ docker-compose up -d
-    ```
-    Let the Docker start the app. By default, the container runs on port 9092 (can be changed in docker-compose.yml):
-    * use credential to log in -> username: mockuser, password:12345
-    * call the mock 
-    ```sh
-    http://localhost:9092/api/mocks/MyMock/MethodUrl
-    ```
-    * launch Management Portal
-    ```sh
-    http://localhost:9092/csp/sys/UtilHome.csp
-    ```
-    The mock can be called from a terminal. To launch the IRIS terminal:
-    ```sh
-    $ docker exec -it onlymock iris session IRIS
-    $ USER>zn "MOCKFW"
-    ...
-    MOCKFW>h  #to exit from terminal
-    ```
-    If you wish to add some changes to the mock, you can, just keep in mind that you have to export the edited mock before the container stop to relaunch the container with changes. Look for the ExportMock() function and copy exported file from folder Export to folder src/ImportData: 
-    * **ExportMock()** -- export mock for Docker usage 
-        * *nameOfTheMock* As %String
-        * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
-        * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
-        ```c++
-        MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "", 1)
-        ```
-    
-    
-    
-2. Download docker image from DockerHub
-    - you just need to run the Docker command with concrete image, which you received:
-    ```sh
-    $ docker run --name onlymock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
-    ```
-    The app listen on port 9092 (or whatever is in command above), call the mock for example via Postman app.
-    * use credential to log in -> username: mockuser, password:12345
-    * call the mock 
-    ```sh
-    http://localhost:9092/api/mocks/MyMock/MethodUrl
-    ```
-    But beware, this approach does not allow to save changes to the mock for later usage. Also, this requires almost double downloaded amount of the data.
-    
-Look at the dockbook documentation to see all mocked methods in the mock!
-
-
-## Instructions for FW user in Caché
-The framework needs to be imported to the Caché/IRIS as a package.
+## Features of Caché Mocking Framework
 The main class from which can be controlled the mock is **MockFW.MockManager**.
 
 #### MockFW.MockManager
@@ -196,22 +146,61 @@ MOCKFW>set mock = ##class(MockFW.Mocks.MyMock).%New()
 MOCKFW>do mock.Method("param")
 ```
 
-#### Instruction to calll the mock via request
-The mock can be called via HTTP request through company web server. To use this, it is necessary to create web applications in Managament Portal:
-```
- System > Security Management > Web Applications > Create New Web Application
-```
-Fill up :
-* Name: /api/mocks
-* Description: Web application for mocking FW
-* Namespace: Namespace, where you import MOCKFW package
-* Allowed Authentication Methods: Password
-* Dispatch Class: MockFW.REST
 
-Save the form and your web app is ready to use!
-```
-http://localhost:CachéPort/api/mocks/MyMock/MethodUrl
-```
+## Working with the obtained mock (Docker project folder)
+As a mock user in Docker you have two options how you can obtain the mock:
+1. Obtain the mock via compressed folder
+    Setup:
+    * unwrap the project folder 
+    * open the project directory in terminal 
+    * build docker image and run the container
+    ```sh
+    $ docker-compose build
+    $ docker-compose up -d
+    ```
+    Let the Docker start the app. By default, the container runs on port 9092 (can be changed in docker-compose.yml):
+    * use credential to log in -> username: mockuser, password:12345
+    * call the mock 
+    ```sh
+    http://localhost:9092/api/mocks/MyMock/MethodUrl
+    ```
+    * launch Management Portal
+    ```sh
+    http://localhost:9092/csp/sys/UtilHome.csp
+    ```
+    The mock can be called from a terminal. To launch the IRIS terminal:
+    ```sh
+    $ docker exec -it onlymock iris session IRIS
+    $ USER>zn "MOCKFW"
+    ...
+    MOCKFW>h  #to exit from terminal
+    ```
+    If you wish to add some changes to the mock, you can, just keep in mind that you have to export the edited mock before the container stop to relaunch the container with changes. Look for the ExportMock() function and copy exported file from folder Export to folder src/ImportData: 
+    * **ExportMock()** -- export mock for Docker usage 
+        * *nameOfTheMock* As %String
+        * *dirPath* As %String -> directory, where the files *dataGlobal.gof* and *mockClass.xml* will be generated
+        * *inContainer* As %Integer (1 | 0) = 0 ->  if inContainer is 1, dirPath is ignored and the file is generated to the Export folder in Docker project folder
+        ```c++
+        MOCKFW>do ##class(MockFW.MockManager).ExportMock("MyMock", "", 1)
+        ```
+    
+    
+    
+2. Download docker image from DockerHub
+    - you just need to run the Docker command with concrete image, which you received:
+    ```sh
+    $ docker run --name onlymock -d --publish 9091:51773 --publish 9092:52773 mattuz/mockingfw:0.2
+    ```
+    The app listen on port 9092 (or whatever is in command above), call the mock for example via Postman app.
+    * use credential to log in -> username: mockuser, password:12345
+    * call the mock 
+    ```sh
+    http://localhost:9092/api/mocks/MyMock/MethodUrl
+    ```
+    But beware, this approach does not allow to save changes to the mock for later usage. Also, this requires almost double downloaded amount of the data.
+    
+Look at the dockbook documentation to see all mocked methods in the mock!
+
 
 
 ## Instructions for FW user to distribute mock via Docker

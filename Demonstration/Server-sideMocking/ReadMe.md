@@ -25,6 +25,12 @@ MOCKFW>do ##class(MockFW.MockManager).CreateMock("Restaurant")
     ```c++
     MOCKFW>do ##class(MockFW.Mocks.Restaurant).SaveMethod("orders", "", "{""Orders"":[{""id"":1},{""id"":2},{""id"":4},{""id"":5}]}")
     ```
+
+    You can call this local method orders (this time without parameters) of mock Restaurant easy from IRIS terminal by:
+    ```c++
+    MOCKFW>w ##class(MockFW.Mocks.Restaurant).orders()
+    ```
+
    * Saving methods (endpoints) from file. If you are in Docker container, copy the CSV file to *Export* folder and fill path */opt/mockfw/export/mock_data.csv*.
     ```c++
     MOCKFW>do ##class(MockFW.MockManager).SaveMethodsFromCSV("/opt/mockfw/export/mock_data.csv")
@@ -37,7 +43,7 @@ MOCKFW>do ##class(MockFW.MockManager).GenerateDocumentation("Restaurant", "", 1)
 ```
 Transformed DocBook documentation by XMLmind from generated XML file is in this folder for showcase (both PDF version and also Web Help)
 
-1) Done! The mock is available on your application port. In container is default port 9092. To send request, try this URL in web browser (better in Postman app):  
+3) Done! The mock is available on your application port. In container is default port 9092. To send request, try this URL in web browser (better in Postman app):  
 login: mockuser  
 password: 12345  
 ```
