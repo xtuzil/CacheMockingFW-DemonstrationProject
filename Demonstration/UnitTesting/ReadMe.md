@@ -17,7 +17,7 @@ USER>zn "MOCKFW"
 
 You can test whether the classes are compiled by (should write '1' if the class *Tests.MathService* is right compiled):
 ```c++
-w ##class(%Dictionary.CompiledClass).%ExistsId("Tests.MathService")
+MOCKFW>w ##class(%Dictionary.CompiledClass).%ExistsId("Tests.MathService")
 ```
   
   

@@ -14,7 +14,7 @@ MOCKFW>do ##class(MockFW.MockManager).ExportMock("Restaurant", "opt/mockfw/expor
 ```
   
     
-3. Copy exported file *mockGlobal.gof* and optionally *mockClass.xml* (necessary only for calling the mock from IRIS terminal) to the project folder **src/ImportData**
+3. Copy exported file *RestaurantGlobal.gof* and optionally *RestaurantMockClass.xml* (necessary only for calling the mock from IRIS terminal) to the project folder **src/ImportData**
 
 Then, there are two option to distribute the mock:  
 
