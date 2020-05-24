@@ -37,7 +37,7 @@ b) Build the container and push it to Docker hub. The user will launch the mock 
         
    5. Then rename the image (tag the image) by finding the container ID or name (using **docker ps**).  
         ```sh
-        $ docker tag mock1 myrepository/imagename:version
+        $ docker tag onlymock myrepository/imagename:version
          ```
    6. Now, push the image to the registry using the image ID.  
         ```sh
